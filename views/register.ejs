@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Register</title></head>
+<body>
+  <h2>Register</h2>
+  <% if (error) { %>
+  <p style="color:red"><%= error %></p>
+  <% } %>
+  <form method="POST" action="/register">
+    <input name="email" type="email" placeholder="Email" required /><br />
+    <input name="password" type="password" placeholder="Password" required /><br />
+    <button type="submit">Daftar</button>
+  </form>
+  <p>Sudah punya akun? <a href="/login">Login di sini</a></p>
+</body>
+</html>

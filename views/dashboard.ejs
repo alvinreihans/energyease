@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard Energi</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h2>Monitoring Energi</h2>
+  <div>
+    <p>Tegangan: <span id="tegangan">-</span> V</p>
+    <p>Arus: <span id="arus">-</span> A</p>
+    <p>Daya: <span id="daya">-</span> W</p>
+    <p>Energi: <span id="energi">-</span> Wh</p>
+  </div>
+
+  <script>
+    const socket = io();
+
+    socket.on('sensor-data', ({ topic, payload }) => {
+      if (topic === 'sensor/tegangan') document.getElementById('tegangan').textContent = payload;
+      if (topic === 'sensor/arus') document.getElementById('arus').textContent = payload;
+      if (topic === 'sensor/daya') document.getElementById('daya').textContent = payload;
+      if (topic === 'sensor/energi') document.getElementById('energi').textContent = payload;
+    });
+  </script>
+</body>
+</html>
