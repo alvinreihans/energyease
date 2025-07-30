@@ -14,15 +14,16 @@
     <p>Energi: <span id="energi">-</span> Wh</p>
   </div>
 
-  <script>
-    const socket = io();
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
 
-    socket.on('sensor-data', ({ topic, payload }) => {
-      if (topic === 'sensor/tegangan') document.getElementById('tegangan').textContent = payload;
-      if (topic === 'sensor/arus') document.getElementById('arus').textContent = payload;
-      if (topic === 'sensor/daya') document.getElementById('daya').textContent = payload;
-      if (topic === 'sensor/energi') document.getElementById('energi').textContent = payload;
-    });
-  </script>
+  socket.on('sensor-data', data => {
+    document.getElementById('tegangan').textContent = data.tegangan;
+    document.getElementById('arus').textContent = data.arus;
+    document.getElementById('daya').textContent = data.daya;
+    document.getElementById('energi').textContent = data.energi;
+  });
+</script>
 </body>
 </html>

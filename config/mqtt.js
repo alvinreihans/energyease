@@ -1,41 +1,13 @@
 import mqtt from 'mqtt';
 
-const client = mqtt.connect('mqtt://broker.hivemq.com'); // Ganti ke broker kamu
+const mqttClient = mqtt.connect('mqtt://broker.hivemq.com'); // atau broker kamu
 
-client.on('connect', () => {
-  console.log('🔌 MQTT connected');
-  client.subscribe([
-    'energyease888/sensor/tegangan',
-    'energyease888/sensor/arus',
-    'energyease888/sensor/daya',
-    'energyease888/sensor/energi',
-  ]);
+mqttClient.on('connect', () => {
+  console.log('[MQTT] Connected to broker');
 });
 
-const latestData = {
-  tegangan: null,
-  arus: null,
-  daya: null,
-  energi: null,
-};
-
-client.on('message', (topic, message) => {
-  const value = message.toString();
-
-  switch (topic) {
-    case 'energyease888/sensor/tegangan':
-      latestData.tegangan = value;
-      break;
-    case 'energyease888/sensor/arus':
-      latestData.arus = value;
-      break;
-    case 'energyease888/sensor/daya':
-      latestData.daya = value;
-      break;
-    case 'energyease888/sensor/energi':
-      latestData.energi = value;
-      break;
-  }
+mqttClient.on('error', (err) => {
+  console.error('[MQTT] Connection error:', err);
 });
 
-export { client, latestData };
+export default mqttClient;
