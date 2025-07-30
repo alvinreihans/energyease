@@ -3,6 +3,7 @@
 <head><title>Register</title></head>
 <body>
   <h2>Register</h2>
+  <%- include('partials/header', { userId: userId }) %>
   <% if (error) { %>
   <p style="color:red"><%= error %></p>
   <% } %>

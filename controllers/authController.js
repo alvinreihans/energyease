@@ -10,7 +10,7 @@ export async function loginUser(req, res) {
   if (!match) return res.redirect('/login?error=Password salah');
 
   req.session.userId = user.id;
-  res.redirect('/dashboard');
+  res.redirect('/');
 }
 
 export async function registerUser(req, res) {

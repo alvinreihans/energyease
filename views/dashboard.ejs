@@ -5,6 +5,7 @@
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+  <%- include('partials/header', { userId: userId }) %>
   <h2>Monitoring Energi</h2>
   <div>
     <p>Tegangan: <span id="tegangan">-</span> V</p>
