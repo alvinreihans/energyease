@@ -1,29 +1,160 @@
+<%- include('partials/header') %>
+
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Dashboard Energi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Energy Ease</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('/images/background.png'); 
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .header {
+      background-color: #94c1e2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo::after {
+      content: "⚡";
+      margin-left: 10px;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-icons a img {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .nav-icons a img:hover {
+      transform: scale(1.2);
+    }
+
+    .logout {
+      background-color: red;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .logout:hover {
+      background-color: darkred;
+    }
+
+    .logout:active {
+      background-color: #8b0000;
+      transform: scale(0.96);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 80px;
+    }
+
+    .card {
+      background-color: rgba(163, 217, 165, 0.9);
+      padding: 30px 40px;
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 35px 80px;
+    }
+
+    .item {
+      text-align: center;
+    }
+
+    .item img {
+      width: 70px;
+      height: 70px;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .value {
+      display: inline-block;
+      margin-top: 5px;
+      background-color: yellow;
+      padding: 2px 8px;
+      font-weight: bold;
+    }
+  </style>
+
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <%- include('partials/header', { userId: userId }) %>
-  <h2>Monitoring Energi</h2>
-  <div>
-    <p>Tegangan: <span id="tegangan">-</span> V</p>
-    <p>Arus: <span id="arus">-</span> A</p>
-    <p>Daya: <span id="daya">-</span> W</p>
-    <p>Energi: <span id="energi">-</span> Wh</p>
+  <!-- Konten Utama -->
+  <div class="container">
+    <div class="card">
+
+      <!-- Tegangan -->
+      <div class="item">
+        <img src="/images/tegangan.png" alt="Tegangan">
+        <div class="label">Tegangan</div>
+        <div class="value" id="tegangan">-</div>
+      </div>
+
+      <!-- Arus -->
+      <div class="item">
+        <img src="https://img.icons8.com/ios/100/000000/electrical.png" alt="Arus">
+        <div class="label">Arus</div>
+        <div class="value" id="arus">-</div>
+      </div>
+
+      <!-- Daya -->
+      <div class="item">
+        <img src="/images/Daya.png" alt="Daya">
+        <div class="label">Daya</div>
+        <div class="value" id="daya">-</div>
+      </div>
+
+      <!-- Energi -->
+      <div class="item">
+        <img src="/images/energi.png" alt="Energi">
+        <div class="label">Energi Listrik</div>
+        <div class="value" id="energi">-</div>
+      </div>
+
+    </div>
   </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  const socket = io();
+  <script>
+    const socket = io();
 
-  socket.on('sensor-data', data => {
-    document.getElementById('tegangan').textContent = data.tegangan;
-    document.getElementById('arus').textContent = data.arus;
-    document.getElementById('daya').textContent = data.daya;
-    document.getElementById('energi').textContent = data.energi;
-  });
-</script>
+    socket.on('sensor-data', data => {
+      document.getElementById('tegangan').textContent = `${data.tegangan} Volt`;
+      document.getElementById('arus').textContent = `${data.arus} Ampere`;
+      document.getElementById('daya').textContent = `${data.daya} Watt`;
+      document.getElementById('energi').textContent = `${data.energi} kWh`;
+    });
+  </script>
+
 </body>
 </html>

@@ -1,17 +1,65 @@
-<header>
-  <nav>
-    <ul>
-      <% if (userId) { %>
-        <li><a href="/">Parameter</a></li>
-        <li><a href="/ike">IKE</a></li>
-        <li><a href="/control-panel">Panel Kendali</a></li>
-        <li><a href="/history">Riwayat</a></li>
-        <li><a href="/logout">Logout</a></li>
-      <% } else { %>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/features">Features</a></li>
-        <li><a href="/about">About</a></li>
-      <% } %>
-    </ul>
-  </nav>
-</header>
+<style>
+  .header {
+    background-color: #94c1e2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+
+  .logo {
+    font-weight: bold;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo::after {
+    content: "⚡";
+    margin-left: 10px;
+  }
+
+  .nav-icons {
+    display: flex;
+    gap: 25px;
+  }
+
+  .nav-icons a img {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .nav-icons a img:hover {
+    transform: scale(1.2);
+  }
+
+  .logout {
+    background-color: red;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+
+  .logout:hover {
+    background-color: darkred;
+  }
+
+  .logout:active {
+    background-color: #8b0000;
+    transform: scale(0.96);
+  }
+</style>
+
+<div class="header">
+  <div class="logo">ENERGY EASE</div>
+
+  <div class="nav-icons">
+      <a href="/"><img src="/images/index.png" title="Parameter" width="24" height="24"></a>
+      <a href="/ike"><img src="/images/kwh.png" title="IKE" width="24" height="24"></a>
+      <a href="/control-panel"><img src="/images/on.png" title="Control" width="24" height="24"></a>
+      <a href="/history"><img src="/images/kalender.png" title="History" width="24" height="24"></a>
+  </div>
+    <button class="logout" onclick="window.location.href='/logout'">Logout</button>
+</div>

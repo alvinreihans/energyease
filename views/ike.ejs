@@ -1,1 +1,103 @@
-  <%- include('partials/header', { userId: userId }) %>
+<%- include('partials/header') %>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Energy Ease - IKE</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('/images/background.png'); 
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .ike-box {
+      background-color: #a3d9a5;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 80px auto;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .ike-title {
+      font-weight: bold;
+      font-size: 18px;
+      background-color: #d6db29;
+      display: inline-block;
+      padding: 5px 20px;
+      margin-bottom: 20px;
+    }
+
+    .ike-circle {
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 15px auto;
+      font-weight: bold;
+      font-size: 14px;
+      color: black;
+      white-space: pre-line;
+    }
+
+    .ike-value {
+      font-weight: bold;
+      background-color: #d6db29;
+      display: inline-block;
+      padding: 4px 12px;
+    }
+
+    .sangat-efisien { border: 6px solid green; background-color: #d9ffd9; }
+    .efisien { border: 6px solid blue; background-color: #d9e6ff; }
+    .cukup-efisien { border: 6px solid yellow; background-color: #ffffcc; }
+    .boros { border: 6px solid red; background-color: #ffd9d9; }
+  </style>
+</head>
+<body>
+
+  <div class="ike-box">
+    <div class="ike-title">Tingkat Penggunaan Energi Listrik IKE</div>
+    <div id="ikeCircle" class="ike-circle">Loading...</div>
+    <div class="ike-value" id="ikeValue">-- kWh/m²/bulan</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+<script>
+  const luasBangunan = 200; // Sesuaikan dengan kebutuhan
+  const ikeCircle = document.getElementById("ikeCircle");
+  const ikeValue = document.getElementById("ikeValue");
+
+  const socket = io();
+
+  socket.on('sensor-data', data => {
+    const energi = parseFloat(data.energi); // kWh
+    const ike = energi / luasBangunan;      // kWh/m²
+
+    ikeValue.textContent = ike.toFixed(2) + " kWh/m²/bulan";
+
+    if (ike < 8.5) {
+      ikeCircle.className = "ike-circle sangat-efisien";
+      ikeCircle.textContent = "Sangat Efisien";
+    } else if (ike < 14) {
+      ikeCircle.className = "ike-circle efisien";
+      ikeCircle.textContent = "Efisien";
+    } else if (ike < 18.5) {
+      ikeCircle.className = "ike-circle cukup-efisien";
+      ikeCircle.textContent = "Cukup Efisien";
+    } else {
+      ikeCircle.className = "ike-circle boros";
+      ikeCircle.textContent = "Boros";
+    }
+  });
+</script>
+
+
+</body>
+</html>

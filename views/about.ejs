@@ -1,1 +1,142 @@
-  <%- include('partials/header', { userId: userId }) %>
+<%- include('partials/headerGuest') %>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - Energy Ease</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: url('/images/labtekback.png') no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: black;
+    }
+
+    .hero h2 {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 32px;
+    }
+
+    .about-icon {
+      font-size: 40px;
+      margin: 10px 0;
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+      text-align: left;
+      background-color: rgba(255, 255, 255, 0.75);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .info-block {
+      max-width: 250px;
+    }
+
+    .info-block h3 {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .info-block h3::before {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+
+    .email h3::before {
+      content: "📧";
+    }
+
+    .address h3::before {
+      content: "📍";
+    }
+
+    .phone h3::before {
+      content: "☎️";
+    }
+
+    .info-block p {
+      margin: 4px 0;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links a {
+        font-size: 18px;
+      }
+
+      .info-block h3 {
+        font-size: 18px;
+      }
+
+      .info-block p {
+        font-size: 14px;
+      }
+
+      .contact-info {
+        gap: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero About Section -->
+  <div class="hero">
+    <h2>About Us</h2>
+   <div class="about-icon">
+  <img src="/images/logo.png" alt="Logo Petir" width="100" height="100">
+</div>
+
+    <div class="contact-info">
+      <!-- Email -->
+      <div class="info-block email">
+        <h3>Email</h3>
+        <p>yosi.121130100@student.itera.ac.id</p>
+        <p>jacobus.121130147@student.itera.ac.id</p>
+        <p>yuhfa.121130036@student.itera.ac.id</p>
+      </div>
+
+      <!-- Address -->
+      <div class="info-block address">
+        <h3>Address</h3>
+        <p>Jl. Terusan Ryacudu, Way Huwi,</p>
+        <p>Kec. Jati Agung, Kabupaten</p>
+        <p>Lampung Selatan, Lampung 35365</p>
+      </div>
+
+      <!-- Phone -->
+      <div class="info-block phone">
+        <h3>Phone</h3>
+        <p>081187427858</p>
+        <p>081187427858</p>
+        <p>081187427858</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

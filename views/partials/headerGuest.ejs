@@ -1,0 +1,49 @@
+<style>
+  .navbar {
+    background-color: #8dd18d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+  }
+
+  .logo {
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo::after {
+    content: "⚡";
+    margin-left: 8px;
+  }
+
+  .nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 10px;
+    transition: background 0.3s;
+  }
+
+  .nav-links a:hover {
+    background-color: #ffffffcc;
+  }
+
+  .nav-links a.active {
+    background-color: white;
+    color: black;
+  }
+</style>
+
+<div class="navbar">
+  <div class="logo">ENERGY EASE</div>
+  <div class="nav-links">
+    <a href="/features">Features</a>
+    <a href="/about">About</a>
+    <a href="/login" class="active">Login</a>
+  </div>
+</div>
