@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fitur - Energy Ease</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      .back-link {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        text-decoration: none;
+        color: #555;
+        font-weight: bold;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #3498db;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .header h1 {
+        font-size: 42px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 18px;
+        color: #7f8c8d;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .feature-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-card img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+      }
+
+      .feature-card:hover img {
+        filter: grayscale(0%);
+      }
+
+      .feature-card h3 {
+        font-size: 20px;
+        color: #34495e;
+        margin-bottom: 10px;
+      }
+
+      .feature-card p {
+        font-size: 15px;
+        color: #555;
+        margin: 0;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+
+    <div class="container">
+      <header class="header">
+        <h1>Fitur Unggulan</h1>
+        <p>
+          Energy Ease hadir dengan berbagai fitur canggih untuk membantu Anda
+          mengendalikan dan mengoptimalkan penggunaan energi listrik secara
+          efisien.
+        </p>
+      </header>
+
+      <section class="features-grid">
+        <div class="feature-card">
+          <img
+            src="images/realtime_monitoring.svg"
+            alt="Ikon Pemantauan Real-time" />
+          <h3>Pemantauan Real-time</h3>
+          <p>
+            Lihat konsumsi listrik Anda secara langsung, menit demi menit, untuk
+            mendapatkan gambaran penuh tentang pola penggunaan energi.
+          </p>
+        </div>
+        <div class="feature-card">
+          <img src="images/ike_analysis.svg" alt="Ikon Analisis IKE" />
+          <h3>Analisis IKE (Indeks Konsumsi Energi)</h3>
+          <p>
+            Analisis data konsumsi untuk mengukur efisiensi energi dan menemukan
+            peluang penghematan yang signifikan.
+          </p>
+        </div>
+        <div class="feature-card">
+          <img src="images/iot_control.svg" alt="Ikon Kontrol IoT" />
+          <h3>Kontrol Perangkat IoT</h3>
+          <p>
+            Kendalikan perangkat listrik Anda dari jarak jauh melalui aplikasi,
+            memungkinkan manajemen energi yang fleksibel dan cerdas.
+          </p>
+        </div>
+        <div class="feature-card">
+          <img src="images/data_history.svg" alt="Ikon Riwayat Data" />
+          <h3>Riwayat Data Lengkap</h3>
+          <p>
+            Akses riwayat data konsumsi Anda untuk melihat tren harian,
+            mingguan, hingga bulanan.
+          </p>
+        </div>
+        <div class="feature-card">
+          <img src="images/user_access.svg" alt="Ikon Akses Pengguna" />
+          <h3>Manajemen Akses Pengguna</h3>
+          <p>
+            Kelola akses pengguna untuk setiap lokasi atau perangkat, memberikan
+            keamanan dan kontrol penuh.
+          </p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Ease</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background-image: url('/images/background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: #2c3e50;
+      }
+
+      p {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 30px;
+        max-width: 600px;
+        line-height: 1.6;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: 2px solid #3498db;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: transparent;
+        color: #3498db;
+        transition: background-color 0.3s, color 0.3s;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #3498db;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ENERGY EASE</h1>
+      <p>
+        Sistem monitoring dan pengendalian energi listrik real-time berbasis IoT
+      </p>
+      <div class="btn-group">
+        <a href="/login" class="btn">Masuk</a>
+        <a href="/register" class="btn">Daftar</a>
+        <a href="/features" class="btn">Fitur</a>
+        <a href="/about" class="btn">Tentang</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk - Energy Ease</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .page-title {
+        font-size: 48px;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 30px;
+      }
+
+      .back-link {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        text-decoration: none;
+        color: #555;
+        font-weight: bold;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #3498db;
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .login-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 25px;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        background-color: #fdeded;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #e74c3c;
+      }
+
+      .success-message {
+        color: #27ae60;
+        background-color: #e8f6f3;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #27ae60;
+      }
+
+      .form-box p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+      }
+
+      .form-box input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+
+      .form-box button {
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .form-box button:hover {
+        background-color: #2980b9;
+      }
+
+      .register-link {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #777;
+      }
+
+      .register-link a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .register-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+
+    <h1 class="page-title">Masuk</h1>
+
+    <div class="login-container">
+      <div class="login-title">Energy Ease</div>
+
+      <div class="form-box">
+        <% 
+          let message = '';
+          if (success == 'register_success') {
+              message = 'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.';
+          } else if (success == 'logout_success') {
+              message = 'Anda telah keluar.';
+          } else if (error == 'email_not_found') {
+              message = 'Akun tidak ditemukan';
+          } else if (error == 'wrong_password') {
+              message = 'Kata sandi salah.';
+          } else if (error == 'unauthenticated') {
+            message = 'Silakan masuk terlebih dahulu.'
+          }
+        %>
+        <% if (message) { %>
+        <div class="<%= success ? 'success-message' : 'error-message' %>">
+          <%= message %>
+        </div>
+        <% } %>
+        <p>Masuk ke akun Anda</p>
+        <form action="/login" method="POST">
+          <input type="email" name="email" placeholder="Email" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required />
+          <button type="submit">Masuk</button>
+        </form>
+
+        <div class="register-link">
+          Tidak punya akun? <a href="/register">Daftar</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
