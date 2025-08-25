@@ -1,103 +1,202 @@
-<%- include('partials/header') %>
-
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Energy Ease - IKE</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Ease - Analisis IKE</title>
+    <style>
+      /* CSS umum dan layout IKE */
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-image: url('/images/background.png'); 
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --background-color: #f4f7f9;
+        --card-bg-color: #ffffff;
+        --text-color: #555;
+        --light-text: #bdc3c7;
+        --border-color: #e0e6ed;
+        --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 
-    .ike-box {
-      background-color: #a3d9a5;
-      border-radius: 10px;
-      padding: 30px;
-      margin: 80px auto;
-      max-width: 400px;
-      text-align: center;
-    }
+        /* Warna Status IKE */
+        --status-sangat-efisien: #27ae60;
+        --status-efisien: #3498db;
+        --status-cukup-efisien: #f1c40f;
+        --status-boros: #e74c3c;
+      }
 
-    .ike-title {
-      font-weight: bold;
-      font-size: 18px;
-      background-color: #d6db29;
-      display: inline-block;
-      padding: 5px 20px;
-      margin-bottom: 20px;
-    }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-color);
+        margin-left: 280px;
+      }
 
-    .ike-circle {
-      width: 100px;
-      height: 100px;
-      line-height: 100px;
-      border-radius: 50%;
-      margin: 0 auto 15px auto;
-      font-weight: bold;
-      font-size: 14px;
-      color: black;
-      white-space: pre-line;
-    }
+      .main-content {
+        flex: 1;
+        padding: 30px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-    .ike-value {
-      font-weight: bold;
-      background-color: #d6db29;
-      display: inline-block;
-      padding: 4px 12px;
-    }
+      .header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
 
-    .sangat-efisien { border: 6px solid green; background-color: #d9ffd9; }
-    .efisien { border: 6px solid blue; background-color: #d9e6ff; }
-    .cukup-efisien { border: 6px solid yellow; background-color: #ffffcc; }
-    .boros { border: 6px solid red; background-color: #ffd9d9; }
-  </style>
-</head>
-<body>
+      .header h1 {
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 0;
+      }
 
-  <div class="ike-box">
-    <div class="ike-title">Tingkat Penggunaan Energi Listrik IKE</div>
-    <div id="ikeCircle" class="ike-circle">Loading...</div>
-    <div class="ike-value" id="ikeValue">-- kWh/m²/bulan</div>
-  </div>
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
 
-  <script src="/socket.io/socket.io.js"></script>
-<script>
-  const luasBangunan = 200; // Sesuaikan dengan kebutuhan
-  const ikeCircle = document.getElementById("ikeCircle");
-  const ikeValue = document.getElementById("ikeValue");
+      .user-info .user-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--secondary-color);
+      }
 
-  const socket = io();
+      .user-info .avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #ecf0f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--secondary-color);
+      }
 
-  socket.on('sensor-data', data => {
-    const energi = parseFloat(data.energi); // kWh
-    const ike = energi / luasBangunan;      // kWh/m²
+      .ike-container {
+        background-color: var(--card-bg-color);
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        max-width: 450px;
+        width: 100%;
+        margin-top: 50px;
+      }
 
-    ikeValue.textContent = ike.toFixed(2) + " kWh/m²/bulan";
+      .ike-container h2 {
+        font-weight: 600;
+        font-size: 24px;
+        color: var(--secondary-color);
+        margin-bottom: 25px;
+      }
 
-    if (ike < 8.5) {
-      ikeCircle.className = "ike-circle sangat-efisien";
-      ikeCircle.textContent = "Sangat Efisien";
-    } else if (ike < 14) {
-      ikeCircle.className = "ike-circle efisien";
-      ikeCircle.textContent = "Efisien";
-    } else if (ike < 18.5) {
-      ikeCircle.className = "ike-circle cukup-efisien";
-      ikeCircle.textContent = "Cukup Efisien";
-    } else {
-      ikeCircle.className = "ike-circle boros";
-      ikeCircle.textContent = "Boros";
-    }
-  });
-</script>
+      .ike-status {
+        font-size: 28px;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: inline-block;
+        transition: all 0.5s ease-in-out;
+        color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
 
+      .ike-value-box {
+        background-color: var(--background-color);
+        padding: 15px 25px;
+        border-radius: 8px;
+      }
 
-</body>
+      .ike-value-box .label {
+        font-size: 14px;
+        color: #95a5a6;
+      }
+
+      .ike-value-box .value {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      /* Warna Status */
+      .status-sangat-efisien {
+        background-color: var(--status-sangat-efisien);
+      }
+      .status-efisien {
+        background-color: var(--status-efisien);
+      }
+      .status-cukup-efisien {
+        background-color: var(--status-cukup-efisien);
+      }
+      .status-boros {
+        background-color: var(--status-boros);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <%- include('partials/sidebar') %>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>Analisis IKE</h1>
+        <div class="user-info">
+          <span class="user-name">Halo, User!</span>
+          <div class="avatar"><i class="fas fa-user"></i></div>
+        </div>
+      </div>
+
+      <div class="ike-container">
+        <h2>Indeks Konsumsi Energi Listrik</h2>
+        <div id="ikeStatus" class="ike-status">Loading...</div>
+        <div class="ike-value-box">
+          <div class="label">Nilai IKE</div>
+          <div class="value" id="ikeValue">-- kWh/m²/bulan</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const luasBangunan = 200; // Sesuaikan dengan kebutuhan Anda
+      const ikeStatusEl = document.getElementById('ikeStatus');
+      const ikeValueEl = document.getElementById('ikeValue');
+
+      const socket = io();
+
+      socket.on('sensor-data', (data) => {
+        const energi = parseFloat(data.energi);
+        const ike = energi / luasBangunan;
+
+        ikeValueEl.textContent = ike.toFixed(2) + ' kWh/m²/bulan';
+
+        if (ike < 8.5) {
+          ikeStatusEl.textContent = 'Sangat Efisien';
+          ikeStatusEl.className = 'ike-status status-sangat-efisien';
+        } else if (ike < 14) {
+          ikeStatusEl.textContent = 'Efisien';
+          ikeStatusEl.className = 'ike-status status-efisien';
+        } else if (ike < 18.5) {
+          ikeStatusEl.textContent = 'Cukup Efisien';
+          ikeStatusEl.className = 'ike-status status-cukup-efisien';
+        } else {
+          ikeStatusEl.textContent = 'Boros';
+          ikeStatusEl.className = 'ike-status status-boros';
+        }
+      });
+    </script>
+  </body>
 </html>

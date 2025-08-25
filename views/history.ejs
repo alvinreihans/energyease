@@ -1,1 +1,315 @@
-  <%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Ease - Riwayat Data</title>
+    <style>
+      /* Import font dan variabel tema */
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --background-color: #f4f7f9;
+        --card-bg-color: #ffffff;
+        --text-color: #555;
+        --light-text: #bdc3c7;
+        --border-color: #e0e6ed;
+        --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-color);
+        margin-left: 280px;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 30px;
+        overflow-y: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 0;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-info .user-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--secondary-color);
+      }
+
+      .user-info .avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #ecf0f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--secondary-color);
+      }
+
+      /* Gaya Khusus untuk Halaman Riwayat */
+      .history-card {
+        background-color: var(--card-bg-color);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        margin-bottom: 25px;
+      }
+
+      /* Perubahan utama: Flexbox pada header card */
+      .history-card .card-header {
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .filter-controls input[type='date'] {
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-family: 'Poppins', sans-serif;
+        box-sizing: border-box;
+      }
+
+      /* Gaya Tabel */
+      .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .history-table th,
+      .history-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .history-table th {
+        background-color: var(--background-color);
+        font-weight: 600;
+        color: var(--secondary-color);
+        text-transform: uppercase;
+      }
+
+      .history-table tr:hover {
+        background-color: #f9f9f9;
+      }
+
+      /* Gaya Chart */
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <%- include('partials/sidebar', { activePage: 'history' }) %>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>Riwayat Data</h1>
+        <div class="user-info">
+          <span class="user-name">Halo, User!</span>
+          <div class="avatar"><i class="fas fa-user"></i></div>
+        </div>
+      </div>
+
+      <div class="history-card">
+        <div class="card-header">
+          <div>Riwayat Data Lengkap</div>
+          <div class="filter-controls">
+            <input type="date" id="filter-date" />
+          </div>
+        </div>
+        <div style="overflow-x: auto">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Energi Aktif (kWh)</th>
+                <th>Daya Aktif (W)</th>
+                <th>Faktor Daya</th>
+              </tr>
+            </thead>
+            <tbody id="dataTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="history-card">
+        <div class="card-header">Visualisasi Data</div>
+        <div class="chart-grid">
+          <div class="chart-container">
+            <canvas id="energiChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="dayaChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="pfChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let energiChart, dayaChart, pfChart;
+
+      function generateDummyData() {
+        const data = [];
+        for (let i = 0; i < 24; i++) {
+          const hour = String(i).padStart(2, '0');
+          const time = `${hour}:00`;
+          let energi, daya;
+          if (i >= 0 && i < 6) {
+            energi = parseFloat((Math.random() * 0.5 + 0.1).toFixed(2));
+            daya = parseFloat((Math.random() * 200 + 100).toFixed(0));
+          } else if (i >= 6 && i < 18) {
+            energi = parseFloat((Math.random() * 2.0 + 1.0).toFixed(2));
+            daya = parseFloat((Math.random() * 800 + 500).toFixed(0));
+          } else {
+            energi = parseFloat((Math.random() * 3.0 + 1.5).toFixed(2));
+            daya = parseFloat((Math.random() * 1000 + 600).toFixed(0));
+          }
+          const pf = parseFloat(
+            (Math.random() * (1.0 - 0.95) + 0.95).toFixed(2)
+          );
+          data.push({ time, energi, daya, pf });
+        }
+        return data;
+      }
+
+      function updateData(selectedDate) {
+        const demoData = generateDummyData();
+        const labels = demoData.map((d) => d.time);
+        const energiData = demoData.map((d) => d.energi);
+        const dayaData = demoData.map((d) => d.daya);
+        const pfData = demoData.map((d) => d.pf);
+
+        const tableBody = document.getElementById('dataTableBody');
+        tableBody.innerHTML = '';
+        demoData.forEach((d) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+                    <td>${d.time}</td>
+                    <td>${d.energi}</td>
+                    <td>${d.daya}</td>
+                    <td>${d.pf}</td>
+                `;
+          tableBody.appendChild(tr);
+        });
+
+        if (energiChart) energiChart.destroy();
+        if (dayaChart) dayaChart.destroy();
+        if (pfChart) pfChart.destroy();
+
+        energiChart = new Chart(document.getElementById('energiChart'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Energi (kWh)',
+                data: energiData,
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: { responsive: true, maintainAspectRatio: false },
+        });
+
+        dayaChart = new Chart(document.getElementById('dayaChart'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Daya (W)',
+                data: dayaData,
+                borderColor: '#2ecc71',
+                backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: { responsive: true, maintainAspectRatio: false },
+        });
+
+        pfChart = new Chart(document.getElementById('pfChart'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Faktor Daya',
+                data: pfData,
+                borderColor: '#f39c12',
+                backgroundColor: 'rgba(243, 156, 18, 0.2)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: { responsive: true, maintainAspectRatio: false },
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const dateInput = document.getElementById('filter-date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        updateData(today);
+
+        dateInput.addEventListener('change', (event) => {
+          updateData(event.target.value);
+        });
+      });
+    </script>
+  </body>
+</html>

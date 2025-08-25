@@ -1,1 +1,270 @@
-  <%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Ease - Kontrol Panel</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --background-color: #f4f7f9;
+        --card-bg-color: #ffffff;
+        --text-color: #555;
+        --light-text: #bdc3c7;
+        --border-color: #e0e6ed;
+        --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+        /* Warna Status */
+        --status-on: #27ae60;
+        --status-off: #e74c3c;
+        --button-on-hover: #219653;
+        --button-off-hover: #c0392b;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-color);
+        margin-left: 280px;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 30px;
+        overflow-y: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 0;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-info .user-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--secondary-color);
+      }
+
+      .user-info .avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #ecf0f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--secondary-color);
+      }
+
+      /* Tata Letak untuk Panel Kontrol */
+      .control-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+      }
+
+      .control-card {
+        background-color: var(--card-bg-color);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .control-card img {
+        width: 80px;
+        height: auto;
+        margin-bottom: 15px;
+      }
+
+      .control-card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 0 0 10px 0;
+      }
+
+      .status-indicator {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+        margin-bottom: 20px;
+      }
+
+      .status-indicator.on {
+        background-color: var(--status-on);
+      }
+
+      .status-indicator.off {
+        background-color: var(--status-off);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .button-group button {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .button-group .button-on {
+        background-color: var(--status-on);
+      }
+
+      .button-group .button-off {
+        background-color: var(--status-off);
+      }
+
+      .button-group .button-on:hover {
+        background-color: var(--button-on-hover);
+      }
+
+      .button-group .button-off:hover {
+        background-color: var(--button-off-hover);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  </head>
+  <body>
+    <%- include('partials/sidebar', { activePage: 'control' }) %>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>Kontrol Perangkat</h1>
+        <div class="user-info">
+          <span class="user-name">Halo, User!</span>
+          <div class="avatar"><i class="fas fa-user"></i></div>
+        </div>
+      </div>
+
+      <div class="control-grid">
+        <div class="control-card" id="device-ac1">
+          <img src="https://via.placeholder.com/100" alt="AC 1" />
+          <h3>AC 1</h3>
+          <div class="status-indicator off" id="status-ac1">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('ac1', 'ON')">
+              Hidupkan
+            </button>
+            <button class="button-off" onclick="publishMessage('ac1', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-ac2">
+          <img src="https://via.placeholder.com/100" alt="AC 2" />
+          <h3>AC 2</h3>
+          <div class="status-indicator off" id="status-ac2">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('ac2', 'ON')">
+              Hidupkan
+            </button>
+            <button class="button-off" onclick="publishMessage('ac2', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-ac3">
+          <img src="https://via.placeholder.com/100" alt="AC 3" />
+          <h3>AC 3</h3>
+          <div class="status-indicator off" id="status-ac3">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('ac3', 'ON')">
+              Hidupkan
+            </button>
+            <button class="button-off" onclick="publishMessage('ac3', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Inisialisasi MQTT Client
+      const client = mqtt.connect('mqtt://broker.hivemq.com');
+      const devices = ['ac1', 'ac2', 'ac3'];
+
+      client.on('connect', () => {
+        console.log('Connected to MQTT Broker');
+        // Langganan (subscribe) topik status perangkat
+        devices.forEach((device) => {
+          client.subscribe(`energyEase/status/${device}`);
+        });
+      });
+
+      client.on('message', (topic, message) => {
+        const payload = message.toString();
+        console.log(`Pesan dari topik ${topic}: ${payload}`);
+
+        // Dapatkan nama perangkat dari topik
+        const deviceName = topic.split('/').pop();
+        updateDeviceStatus(deviceName, payload);
+      });
+
+      // Fungsi untuk mengirim perintah kontrol
+      function publishMessage(device, command) {
+        const topic = `energyEase/control/${device}`;
+        client.publish(topic, command, (err) => {
+          if (err) {
+            console.error('Gagal mengirim pesan:', err);
+          } else {
+            console.log(`Perintah '${command}' dikirim ke ${topic}`);
+          }
+        });
+      }
+
+      // Fungsi untuk memperbarui tampilan status
+      function updateDeviceStatus(device, status) {
+        const statusEl = document.getElementById(`status-${device}`);
+        if (!statusEl) return;
+
+        statusEl.textContent = status;
+        statusEl.className = `status-indicator ${status.toLowerCase()}`;
+      }
+    </script>
+  </body>
+</html>

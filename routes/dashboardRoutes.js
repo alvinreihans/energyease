@@ -3,9 +3,17 @@ import { isLoggedIn } from '../middleware/authMiddleware.js'; // Import middlewa
 const router = express.Router();
 
 // Rute yang hanya bisa diakses setelah LOGIN
-router.get('/dashboard', isLoggedIn, (req, res) => res.render('dashboard'));
-router.get('/ike', isLoggedIn, (req, res) => res.render('ike'));
-router.get('/control-panel', isLoggedIn, (req, res) => res.render('controlPanel'));
-router.get('/history', isLoggedIn, (req, res) => res.render('history'));
+router.get('/dashboard', isLoggedIn, (req, res) =>
+  res.render('dashboard', { activePage: 'dashboard' })
+);
+router.get('/ike', isLoggedIn, (req, res) =>
+  res.render('ike', { activePage: 'ike' })
+);
+router.get('/control-panel', isLoggedIn, (req, res) =>
+  res.render('controlPanel', { activePage: 'control' })
+);
+router.get('/history', isLoggedIn, (req, res) =>
+  res.render('history', { activePage: 'history' })
+);
 
 export default router;

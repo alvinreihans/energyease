@@ -1,0 +1,122 @@
+<style>
+  /* CSS sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: var(--secondary-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar .logo-text {
+    color: white;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  /* bagian atas sidebar (logo + menu) */
+  .sidebar .top {
+    flex-grow: 1; /* isi sisa ruang */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar nav {
+    flex-grow: 1;
+  }
+
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar nav ul li {
+    margin-bottom: 10px;
+  }
+
+  .sidebar nav ul li a {
+    color: var(--light-text);
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .sidebar nav ul li a i {
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .sidebar nav ul li a:hover,
+  .sidebar nav ul li a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  /* Tombol logout */
+  .sidebar .logout-link {
+    text-decoration: none;
+    color: var(--light-text);
+    display: block;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px; /* biar ga nempel banget ke bawah */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .sidebar .logout-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+</style>
+
+<div class="sidebar">
+  <div class="top">
+    <div class="logo-text">Energy Ease</div>
+    <nav>
+      <ul>
+        <li>
+          <a
+            href="/dashboard"
+            class="<%= activePage === 'dashboard' ? 'active' : '' %>">
+            <i class="fas fa-home"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/ike" class="<%= activePage === 'ike' ? 'active' : '' %>">
+            <i class="fas fa-chart-bar"></i> Analisis IKE
+          </a>
+        </li>
+        <li>
+          <a
+            href="/control-panel"
+            class="<%= activePage === 'control' ? 'active' : '' %>">
+            <i class="fas fa-cogs"></i> Kontrol Panel
+          </a>
+        </li>
+        <li>
+          <a
+            href="/history"
+            class="<%= activePage === 'history' ? 'active' : '' %>">
+            <i class="fas fa-history"></i> Riwayat Data
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <a href="/logout" class="logout-link">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </a>
+</div>
