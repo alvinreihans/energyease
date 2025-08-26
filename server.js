@@ -5,15 +5,17 @@ import session from 'express-session';
 import { Server as SocketIO } from 'socket.io';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import mqttClient from './config/mqtt.js';
+// import mqttClient from './config/mqtt.js'; // ⬅️ ganti ini
+// import { saveSensorData } from './models/sensorModel.js'; // ⬅️ tidak perlu lagi
+
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
-import { saveSensorData } from './models/sensorModel.js';
+import { setupMqtt } from './config/mqtt.js'; // ⬅️ import fungsi setupMqtt dari mqtt.js
 
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app); // ⬅️ penting agar bisa pakai Socket.IO
+const server = http.createServer(app);
 const io = new SocketIO(server);
 
 // Path dan view engine
@@ -48,21 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', authRoutes);
 app.use('/', dashboardRoutes);
 
-// MQTT Subscribe + Redistribusi ke Socket.IO
-mqttClient.subscribe('energyease888/sensor');
-
-mqttClient.on('message', async (topic, message) => {
-  console.log('[MQTT] Message received:', topic, message.toString());
-  if (topic === 'energyease888/sensor') {
-    try {
-      const data = JSON.parse(message.toString());
-      await saveSensorData(data); // simpan ke DB
-      io.emit('sensor-data', data); // broadcast ke client
-    } catch (err) {
-      console.error('[MQTT] Gagal parsing / menyimpan:', err.message);
-    }
-  }
-});
+// Panggil fungsi setup MQTT
+setupMqtt(io); // ⬅️ panggil fungsi dengan objek io
 
 // Jalankan server
 const PORT = process.env.PORT || 3000;

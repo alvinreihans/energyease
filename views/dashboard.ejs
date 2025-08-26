@@ -226,7 +226,7 @@
         </div>
         <div class="summary-item">
           <div class="title">Faktor Daya Total</div>
-          <div class="value" id="power-factor-total">-</div>
+          <div class="value" id="total-power-factor">-</div>
           <div class="unit">PF</div>
         </div>
       </div>
@@ -346,5 +346,82 @@
         </div>
       </div>
     </div>
+    <script>
+      const socket = io();
+
+      // Summary
+      socket.on('sensor-data', (data) => {
+        document.getElementById(
+          'energy-active'
+        ).textContent = `${data.energyActive}`;
+        document.getElementById(
+          'energy-reactive'
+        ).textContent = `${data.energyReactive}`;
+        document.getElementById(
+          'total-power-factor'
+        ).textContent = `${data.totalPowerFactor}`;
+
+        // Tegangan & Arus per Fasa
+        document.getElementById('voltage-a').textContent = `${data.voltageA}`;
+        document.getElementById('current-a').textContent = `${data.currentA}`;
+        document.getElementById('voltage-b').textContent = `${data.voltageB}`;
+        document.getElementById('current-b').textContent = `${data.currentB}`;
+        document.getElementById('voltage-c').textContent = `${data.voltageC}`;
+        document.getElementById('current-c').textContent = `${data.currentC}`;
+
+        // Daya Aktif (W)
+        document.getElementById(
+          'power-active-r'
+        ).textContent = `${data.powerActiveR}`;
+        document.getElementById(
+          'power-active-s'
+        ).textContent = `${data.powerActiveS}`;
+        document.getElementById(
+          'power-active-t'
+        ).textContent = `${data.powerActiveT}`;
+        document.getElementById(
+          'power-active-total'
+        ).textContent = `${data.powerActiveTotal}`;
+
+        // Daya Reaktif (Var)
+        document.getElementById(
+          'power-reactive-r'
+        ).textContent = `${data.powerReactiveR}`;
+        document.getElementById(
+          'power-reactive-s'
+        ).textContent = `${data.powerReactiveS}`;
+        document.getElementById(
+          'power-reactive-t'
+        ).textContent = `${data.powerReactiveT}`;
+        document.getElementById(
+          'power-reactive-total'
+        ).textContent = `${data.powerReactiveTotal}`;
+
+        // Daya Semu (VA)
+        document.getElementById(
+          'power-apparent-r'
+        ).textContent = `${data.powerApparentR}`;
+        document.getElementById(
+          'power-apparent-s'
+        ).textContent = `${data.powerApparentS}`;
+        document.getElementById(
+          'power-apparent-t'
+        ).textContent = `${data.powerApparentT}`;
+        document.getElementById(
+          'power-apparent-total'
+        ).textContent = `${data.powerApparentTotal}`;
+
+        // Faktor Daya (PF) per Fasa
+        document.getElementById(
+          'power-factor-r'
+        ).textContent = `${data.powerFactorR}`;
+        document.getElementById(
+          'power-factor-s'
+        ).textContent = `${data.powerFactorS}`;
+        document.getElementById(
+          'power-factor-t'
+        ).textContent = `${data.powerFactorT}`;
+      });
+    </script>
   </body>
 </html>

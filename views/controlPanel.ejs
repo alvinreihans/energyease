@@ -192,7 +192,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-ac2">
           <img src="https://via.placeholder.com/100" alt="AC 2" />
           <h3>AC 2</h3>
@@ -220,51 +219,192 @@
             </button>
           </div>
         </div>
+
+        <div class="control-card" id="device-lampu1">
+          <img src="https://via.placeholder.com/100" alt="Lampu 1" />
+          <h3>Lampu 1</h3>
+          <div class="status-indicator off" id="status-lampu1">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('lampu1', 'ON')">
+              Hidupkan
+            </button>
+            <button
+              class="button-off"
+              onclick="publishMessage('lampu1', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-lampu2">
+          <img src="https://via.placeholder.com/100" alt="Lampu 2" />
+          <h3>Lampu 2</h3>
+          <div class="status-indicator off" id="status-lampu2">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('lampu2', 'ON')">
+              Hidupkan
+            </button>
+            <button
+              class="button-off"
+              onclick="publishMessage('lampu2', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-lampu3">
+          <img src="https://via.placeholder.com/100" alt="Lampu 3" />
+          <h3>Lampu 3</h3>
+          <div class="status-indicator off" id="status-lampu3">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('lampu3', 'ON')">
+              Hidupkan
+            </button>
+            <button
+              class="button-off"
+              onclick="publishMessage('lampu3', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-lampu4">
+          <img src="https://via.placeholder.com/100" alt="Lampu 4" />
+          <h3>Lampu 4</h3>
+          <div class="status-indicator off" id="status-lampu4">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('lampu4', 'ON')">
+              Hidupkan
+            </button>
+            <button
+              class="button-off"
+              onclick="publishMessage('lampu4', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
+
+        <div class="control-card" id="device-lampu5">
+          <img src="https://via.placeholder.com/100" alt="Lampu 5" />
+          <h3>Lampu 5</h3>
+          <div class="status-indicator off" id="status-lampu5">OFF</div>
+          <div class="button-group">
+            <button class="button-on" onclick="publishMessage('lampu5', 'ON')">
+              Hidupkan
+            </button>
+            <button
+              class="button-off"
+              onclick="publishMessage('lampu5', 'OFF')">
+              Matikan
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"
+      type="text/javascript"></script>
     <script>
-      // Inisialisasi MQTT Client
-      const client = mqtt.connect('mqtt://broker.hivemq.com');
-      const devices = ['ac1', 'ac2', 'ac3'];
+      // Konfigurasi koneksi MQTT
+      const brokerUrl = 'broker.hivemq.com';
+      const port = 8000; // Gunakan port 8000 untuk koneksi WebSocket
+      const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8);
 
-      client.on('connect', () => {
-        console.log('Connected to MQTT Broker');
-        // Langganan (subscribe) topik status perangkat
+      // Buat klien MQTT
+      const client = new Paho.MQTT.Client(
+        brokerUrl,
+        Number(port),
+        '/mqtt',
+        clientId
+      );
+
+      // Fungsi untuk koneksi
+      function connect() {
+        client.connect({
+          onSuccess: onConnect,
+          onFailure: onFailure,
+        });
+      }
+
+      // Handler saat koneksi berhasil
+      function onConnect() {
+        console.log('✅ Connected to MQTT broker');
+        // Subscribe ke topik status untuk menerima update
+        const devices = [
+          'ac1',
+          'ac2',
+          'ac3',
+          'lampu1',
+          'lampu2',
+          'lampu3',
+          'lampu4',
+          'lampu5',
+        ];
         devices.forEach((device) => {
-          client.subscribe(`energyEase/status/${device}`);
+          client.subscribe(`energyease/status/${device}`);
         });
-      });
+      }
 
-      client.on('message', (topic, message) => {
-        const payload = message.toString();
-        console.log(`Pesan dari topik ${topic}: ${payload}`);
+      // Handler saat koneksi gagal
+      function onFailure(responseObject) {
+        console.error(
+          '❌ Failed to connect to MQTT broker: ',
+          responseObject.errorMessage
+        );
+      }
 
-        // Dapatkan nama perangkat dari topik
-        const deviceName = topic.split('/').pop();
-        updateDeviceStatus(deviceName, payload);
-      });
+      // Handler saat pesan diterima
+      client.onMessageArrived = function (message) {
+        const topic = message.destinationName;
+        const status = message.payloadString;
+        const deviceId = topic.split('/').pop();
+        console.log(`[MQTT] Received status update for ${deviceId}: ${status}`);
+        updateDeviceStatus(deviceId, status);
+      };
 
-      // Fungsi untuk mengirim perintah kontrol
-      function publishMessage(device, command) {
-        const topic = `energyEase/control/${device}`;
-        client.publish(topic, command, (err) => {
-          if (err) {
-            console.error('Gagal mengirim pesan:', err);
+      // Handler saat koneksi terputus
+      client.onConnectionLost = function (responseObject) {
+        if (responseObject.reconnect) {
+          console.log('❌ Connection lost. Reconnecting...');
+          setTimeout(connect, 3000); // Coba terhubung kembali setelah 3 detik
+        }
+      };
+
+      // Fungsi untuk mengirim pesan perintah
+      function publishMessage(deviceId, command) {
+        if (client.isConnected()) {
+          const topic = `energyease/command/${deviceId}`;
+          const message = new Paho.MQTT.Message(command);
+          message.destinationName = topic;
+          client.send(message);
+          console.log(
+            `[MQTT] Published command '${command}' to topic '${topic}'`
+          );
+        } else {
+          console.error(
+            '❌ Not connected to MQTT broker. Cannot publish message.'
+          );
+        }
+      }
+
+      // Fungsi untuk mengupdate UI berdasarkan status
+      function updateDeviceStatus(deviceId, status) {
+        const statusElement = document.getElementById(`status-${deviceId}`);
+        if (statusElement) {
+          statusElement.textContent = status.toUpperCase();
+          if (status.toUpperCase() === 'ON') {
+            statusElement.classList.remove('off');
+            statusElement.classList.add('on');
           } else {
-            console.log(`Perintah '${command}' dikirim ke ${topic}`);
+            statusElement.classList.remove('on');
+            statusElement.classList.add('off');
           }
-        });
+        }
       }
 
-      // Fungsi untuk memperbarui tampilan status
-      function updateDeviceStatus(device, status) {
-        const statusEl = document.getElementById(`status-${device}`);
-        if (!statusEl) return;
-
-        statusEl.textContent = status;
-        statusEl.className = `status-indicator ${status.toLowerCase()}`;
-      }
+      // Jalankan koneksi saat halaman selesai dimuat
+      document.addEventListener('DOMContentLoaded', connect);
     </script>
   </body>
 </html>

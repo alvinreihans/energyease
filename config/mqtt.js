@@ -1,13 +1,34 @@
 import mqtt from 'mqtt';
+import { saveSensorData } from '../models/sensorModel.js';
 
-const mqttClient = mqtt.connect('mqtt://broker.hivemq.com'); // atau broker kamu
+// Konfigurasi koneksi MQTT
+const connectUrl = `mqtt://${process.env.MQTT_HOST || 'broker.emqx.io'}:1883`;
+const mqttClient = mqtt.connect(connectUrl);
 
 mqttClient.on('connect', () => {
-  console.log('[MQTT] Connected to broker');
+  console.log('✅ MQTT Client connected');
 });
 
 mqttClient.on('error', (err) => {
-  console.error('[MQTT] Connection error:', err);
+  console.error('❌ MQTT Client error:', err);
 });
 
-export default mqttClient;
+// Tambahkan fungsi ini
+const setupMqtt = (io) => {
+  mqttClient.subscribe('energyease888/sensor');
+
+  mqttClient.on('message', async (topic, message) => {
+    console.log('[MQTT] Message received:', topic, message.toString());
+    if (topic === 'energyease888/sensor') {
+      try {
+        const data = JSON.parse(message.toString());
+        await saveSensorData(data); // simpan ke DB
+        io.emit('sensor-data', data); // broadcast ke client
+      } catch (err) {
+        console.error('[MQTT] Gagal parsing / menyimpan:', err.message);
+      }
+    }
+  });
+};
+
+export { mqttClient, setupMqtt };
