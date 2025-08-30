@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
-import { findUserByEmail, createUser } from '../models/userModel.js';
+import { findUserByEmailOrUsername, createUser } from '../models/userModel.js';
 
 export async function loginUser(req, res) {
-  const { email, password } = req.body;
-  const user = await findUserByEmail(email);
-  if (!user) return res.redirect('/login?error=email_not_found');
+  const { identifier, password } = req.body;
+  const user = await findUserByEmailOrUsername(identifier);
+  if (!user) return res.redirect('/login?error=user_not_found');
 
   const match = await bcrypt.compare(password, user.password);
   if (!match) return res.redirect('/login?error=wrong_password');
@@ -16,8 +16,15 @@ export async function loginUser(req, res) {
 
 export async function registerUser(req, res) {
   const { username, email, password } = req.body;
-  const existing = await findUserByEmail(email);
-  if (existing) return res.redirect('/register?error=email_exists');
+  const existing = await findUserByEmailOrUsername(email);
+  
+    // Cek apakah email sudah ada
+  const emailExists = await findUserByEmailOrUsername(email);
+  if (emailExists) return res.redirect('/register?error=email_exists');
+
+  // Cek apakah username sudah ada
+  const usernameExists = await findUserByEmailOrUsername(username);
+  if (usernameExists) return res.redirect('/register?error=username_exists');
 
   const id = `user-${nanoid(16)}`;
   const hashed = await bcrypt.hash(password, 10);

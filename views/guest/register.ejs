@@ -147,8 +147,14 @@
       <div class="register-title">Energy Ease</div>
 
       <form class="form-box" method="POST" action="/register">
-        <% if (error == 'email_exists') { %>
-        <div class="error-message">Email sudah terdaftar.</div>
+        <% if (error) { %>
+        <div class="error-message">
+          <% if (error === 'email_exists') { %>
+          Email sudah terdaftar.
+          <% } else if (error === 'username_exists') { %>
+          Nama pengguna sudah digunakan.
+          <% } %>
+        </div>
         <% } %>
         <p>Daftar akun untuk memulai</p>
 

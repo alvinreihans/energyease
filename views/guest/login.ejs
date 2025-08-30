@@ -162,7 +162,7 @@
               message = 'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.';
           } else if (success == 'logout_success') {
               message = 'Anda telah keluar.';
-          } else if (error == 'email_not_found') {
+          } else if (error == 'user_not_found') {
               message = 'Akun tidak ditemukan';
           } else if (error == 'wrong_password') {
               message = 'Kata sandi salah.';
@@ -177,11 +177,11 @@
         <% } %>
         <p>Masuk ke akun Anda</p>
         <form action="/login" method="POST">
-          <label for="email">Email</label>
+          <label for="identifier">Email atau Nama Pengguna</label>
           <input
-            type="email"
-            name="email"
-            id="email"
+            type="text"
+            name="identifier"
+            id="identifier"
             required />
 
           <label for="password">Password</label>
