@@ -64,20 +64,42 @@
         border: 1px solid #e74c3c;
       }
 
+      /* New styling for form box and its elements */
+      .form-box {
+        text-align: left; /* Align form content to the left */
+        width: 100%;
+        max-width: 380px;
+      }
+
       .form-box p {
         font-size: 16px;
         color: #555;
         margin-bottom: 20px;
+        text-align: center; /* Center the sub-heading */
+      }
+
+      .form-box label {
+        display: block;
+        font-size: 14px;
+        color: #333;
+        margin-top: 15px; /* Spacing between input groups */
+        margin-bottom: 5px;
+        font-weight: bold;
       }
 
       .form-box input {
         width: 100%;
         padding: 12px;
-        margin-bottom: 15px;
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 16px;
         box-sizing: border-box;
+      }
+
+      .form-box input:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
       }
 
       .form-box button {
@@ -91,6 +113,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        margin-top: 20px; /* Add space above the button */
       }
 
       .form-box button:hover {
@@ -101,6 +124,7 @@
         margin-top: 20px;
         font-size: 14px;
         color: #777;
+        text-align: center; /* Center the link */
       }
 
       .login-link a {
@@ -127,15 +151,20 @@
         <div class="error-message">Email sudah terdaftar.</div>
         <% } %>
         <p>Daftar akun untuk memulai</p>
-        <input name="email" type="email" placeholder="Email" required />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          required />
+
+        <label for="username">Nama pengguna</label>
+        <input name="username" id="username" required />
+
+        <label for="email">Email</label>
+        <input name="email" id="email" type="email" required />
+
+        <label for="password">Password</label>
+        <input name="password" id="password" type="password" required />
+
         <button type="submit">Daftar</button>
         <div class="login-link">
-          Sudah punya akun? <a href="/login">Masuk</a>
+          Sudah punya akun?
+          <a href="/login">Masuk</a>
         </div>
       </form>
     </div>

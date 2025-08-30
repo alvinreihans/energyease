@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { nanoid } from 'nanoid';
 import { findUserByEmail, createUser } from '../models/userModel.js';
 
 export async function loginUser(req, res) {
@@ -14,11 +15,12 @@ export async function loginUser(req, res) {
 }
 
 export async function registerUser(req, res) {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
   const existing = await findUserByEmail(email);
   if (existing) return res.redirect('/register?error=email_exists');
 
+  const id = `user-${nanoid(16)}`;
   const hashed = await bcrypt.hash(password, 10);
-  await createUser(email, hashed);
+  await createUser(id, username, email, hashed);
   res.redirect('/login?success=register_success');
 }
