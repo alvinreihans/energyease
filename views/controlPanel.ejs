@@ -342,7 +342,7 @@
           'lampu5',
         ];
         devices.forEach((device) => {
-          client.subscribe(`energyease/status/${device}`);
+          client.subscribe(`energyease888/status/${device}`);
         });
       }
 
@@ -374,7 +374,7 @@
       // Fungsi untuk mengirim pesan perintah
       function publishMessage(deviceId, command) {
         if (client.isConnected()) {
-          const topic = `energyease/command/${deviceId}`;
+          const topic = `energyease888/command/${deviceId}`;
           const message = new Paho.MQTT.Message(command);
           message.destinationName = topic;
           client.send(message);

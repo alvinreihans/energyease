@@ -7,7 +7,6 @@
     <style>
       /* CSS umum dan layout dashboard */
       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
       :root {
         --primary-color: #3498db;
         --secondary-color: #2c3e50;
@@ -121,78 +120,48 @@
         color: #95a5a6;
       }
 
-      .voltage-current-list {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .vc-item {
-        display: flex;
-        align-items: center;
-        padding: 15px 20px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        border-left: 5px solid var(--primary-color);
-      }
-
-      .vc-item .fasa {
-        font-weight: 600;
-        font-size: 18px;
-        color: var(--secondary-color);
-        min-width: 80px;
-      }
-
-      .vc-item .data-group {
-        display: flex;
-        gap: 40px;
-        margin-left: 40px;
-        font-size: 16px;
-      }
-
-      .vc-item .data-group span {
-        font-weight: 500;
-      }
-
-      .power-grid-container {
+      .phase-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
       }
 
-      .power-item {
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 20px;
+      .phase-block {
+        background-color: var(--card-bg-color);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: var(--shadow);
       }
 
-      .power-item h4 {
-        font-size: 18px;
+      .phase-header {
+        font-size: 20px;
         font-weight: 600;
         color: var(--secondary-color);
-        margin: 0 0 15px 0;
-        text-align: center;
-        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border-color);
         padding-bottom: 10px;
+        text-align: center;
       }
 
-      .power-values {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+      .phase-data {
+        display: flex;
+        flex-direction: column;
         gap: 15px;
       }
 
-      .power-value-item {
-        text-align: center;
+      .data-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        padding: 5px 0;
       }
 
-      .power-value-item .label {
-        font-size: 14px;
-        color: #777;
+      .data-row .label {
+        font-weight: 500;
+        color: var(--text-color);
       }
 
-      .power-value-item .value {
-        font-size: 24px;
+      .data-row .value {
         font-weight: 600;
         color: var(--primary-color);
       }
@@ -229,119 +198,111 @@
           <div class="value" id="total-power-factor">-</div>
           <div class="unit">PF</div>
         </div>
-      </div>
-
-      <div class="dashboard-block">
-        <div class="block-header">Tegangan & Arus per Fasa</div>
-        <div class="voltage-current-list">
-          <div class="vc-item">
-            <div class="fasa">Fasa A</div>
-            <div class="data-group">
-              <span>Tegangan: <span id="voltage-a">-</span> V</span>
-              <span>Arus: <span id="current-a">-</span> A</span>
-            </div>
-          </div>
-          <div class="vc-item">
-            <div class="fasa">Fasa B</div>
-            <div class="data-group">
-              <span>Tegangan: <span id="voltage-b">-</span> V</span>
-              <span>Arus: <span id="current-b">-</span> A</span>
-            </div>
-          </div>
-          <div class="vc-item">
-            <div class="fasa">Fasa C</div>
-            <div class="data-group">
-              <span>Tegangan: <span id="voltage-c">-</span> V</span>
-              <span>Arus: <span id="current-c">-</span> A</span>
-            </div>
-          </div>
+        <div class="summary-item">
+          <div class="title">Daya Aktif Total</div>
+          <div class="value" id="power-active-total">-</div>
+          <div class="unit">W</div>
+        </div>
+        <div class="summary-item">
+          <div class="title">Daya Reaktif Total</div>
+          <div class="value" id="power-reactive-total">-</div>
+          <div class="unit">Var</div>
+        </div>
+        <div class="summary-item">
+          <div class="title">Daya Semu Total</div>
+          <div class="value" id="power-apparent-total">-</div>
+          <div class="unit">VA</div>
         </div>
       </div>
 
-      <div class="dashboard-block power-grid-container">
-        <div class="power-item">
-          <h4>Daya Aktif (W)</h4>
-          <div class="power-values">
-            <div class="power-value-item">
-              <div class="label">R</div>
-              <div class="value" id="power-active-r">-</div>
+      <div class="dashboard-block phase-grid">
+        <div class="phase-block">
+          <h4 class="phase-header">Fasa R</h4>
+          <div class="phase-data">
+            <div class="data-row">
+              <span class="label">Tegangan:</span>
+              <span class="value" id="voltage-a">- V</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">S</div>
-              <div class="value" id="power-active-s">-</div>
+            <div class="data-row">
+              <span class="label">Arus:</span>
+              <span class="value" id="current-a">- A</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">T</div>
-              <div class="value" id="power-active-t">-</div>
+            <div class="data-row">
+              <span class="label">Daya Aktif:</span>
+              <span class="value" id="power-active-r">- W</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">Total</div>
-              <div class="value" id="power-active-total">-</div>
+            <div class="data-row">
+              <span class="label">Daya Reaktif:</span>
+              <span class="value" id="power-reactive-r">- Var</span>
             </div>
-          </div>
-        </div>
-
-        <div class="power-item">
-          <h4>Daya Reaktif (Var)</h4>
-          <div class="power-values">
-            <div class="power-value-item">
-              <div class="label">R</div>
-              <div class="value" id="power-reactive-r">-</div>
+            <div class="data-row">
+              <span class="label">Daya Semu:</span>
+              <span class="value" id="power-apparent-r">- VA</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">S</div>
-              <div class="value" id="power-reactive-s">-</div>
-            </div>
-            <div class="power-value-item">
-              <div class="label">T</div>
-              <div class="value" id="power-reactive-t">-</div>
-            </div>
-            <div class="power-value-item">
-              <div class="label">Total</div>
-              <div class="value" id="power-reactive-total">-</div>
+            <div class="data-row">
+              <span class="label">Faktor Daya:</span>
+              <span class="value" id="power-factor-r">- PF</span>
             </div>
           </div>
         </div>
 
-        <div class="power-item">
-          <h4>Daya Semu (VA)</h4>
-          <div class="power-values">
-            <div class="power-value-item">
-              <div class="label">R</div>
-              <div class="value" id="power-apparent-r">-</div>
+        <div class="phase-block">
+          <h4 class="phase-header">Fasa S</h4>
+          <div class="phase-data">
+            <div class="data-row">
+              <span class="label">Tegangan:</span>
+              <span class="value" id="voltage-b">- V</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">S</div>
-              <div class="value" id="power-apparent-s">-</div>
+            <div class="data-row">
+              <span class="label">Arus:</span>
+              <span class="value" id="current-b">- A</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">T</div>
-              <div class="value" id="power-apparent-t">-</div>
+            <div class="data-row">
+              <span class="label">Daya Aktif:</span>
+              <span class="value" id="power-active-s">- W</span>
             </div>
-            <div class="power-value-item">
-              <div class="label">Total</div>
-              <div class="value" id="power-apparent-total">-</div>
+            <div class="data-row">
+              <span class="label">Daya Reaktif:</span>
+              <span class="value" id="power-reactive-s">- Var</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Daya Semu:</span>
+              <span class="value" id="power-apparent-s">- VA</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Faktor Daya:</span>
+              <span class="value" id="power-factor-s">- PF</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="dashboard-block">
-        <div class="block-header">Faktor Daya (PF) per Fasa</div>
-        <div
-          class="power-values"
-          style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr))">
-          <div class="power-value-item">
-            <div class="label">R</div>
-            <div class="value" id="power-factor-r">-</div>
-          </div>
-          <div class="power-value-item">
-            <div class="label">S</div>
-            <div class="value" id="power-factor-s">-</div>
-          </div>
-          <div class="power-value-item">
-            <div class="label">T</div>
-            <div class="value" id="power-factor-t">-</div>
+        <div class="phase-block">
+          <h4 class="phase-header">Fasa T</h4>
+          <div class="phase-data">
+            <div class="data-row">
+              <span class="label">Tegangan:</span>
+              <span class="value" id="voltage-c">- V</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Arus:</span>
+              <span class="value" id="current-c">- A</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Daya Aktif:</span>
+              <span class="value" id="power-active-t">- W</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Daya Reaktif:</span>
+              <span class="value" id="power-reactive-t">- Var</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Daya Semu:</span>
+              <span class="value" id="power-apparent-t">- VA</span>
+            </div>
+            <div class="data-row">
+              <span class="label">Faktor Daya:</span>
+              <span class="value" id="power-factor-t">- PF</span>
+            </div>
           </div>
         </div>
       </div>
@@ -349,8 +310,8 @@
     <script>
       const socket = io();
 
-      // Summary
       socket.on('sensor-data', (data) => {
+        // Update Ringkasan Utama
         document.getElementById(
           'energy-active'
         ).textContent = `${data.energyActive}`;
@@ -360,67 +321,63 @@
         document.getElementById(
           'total-power-factor'
         ).textContent = `${data.totalPowerFactor}`;
-
-        // Tegangan & Arus per Fasa
-        document.getElementById('voltage-a').textContent = `${data.voltageA}`;
-        document.getElementById('current-a').textContent = `${data.currentA}`;
-        document.getElementById('voltage-b').textContent = `${data.voltageB}`;
-        document.getElementById('current-b').textContent = `${data.currentB}`;
-        document.getElementById('voltage-c').textContent = `${data.voltageC}`;
-        document.getElementById('current-c').textContent = `${data.currentC}`;
-
-        // Daya Aktif (W)
-        document.getElementById(
-          'power-active-r'
-        ).textContent = `${data.powerActiveR}`;
-        document.getElementById(
-          'power-active-s'
-        ).textContent = `${data.powerActiveS}`;
-        document.getElementById(
-          'power-active-t'
-        ).textContent = `${data.powerActiveT}`;
         document.getElementById(
           'power-active-total'
         ).textContent = `${data.powerActiveTotal}`;
-
-        // Daya Reaktif (Var)
-        document.getElementById(
-          'power-reactive-r'
-        ).textContent = `${data.powerReactiveR}`;
-        document.getElementById(
-          'power-reactive-s'
-        ).textContent = `${data.powerReactiveS}`;
-        document.getElementById(
-          'power-reactive-t'
-        ).textContent = `${data.powerReactiveT}`;
         document.getElementById(
           'power-reactive-total'
         ).textContent = `${data.powerReactiveTotal}`;
-
-        // Daya Semu (VA)
-        document.getElementById(
-          'power-apparent-r'
-        ).textContent = `${data.powerApparentR}`;
-        document.getElementById(
-          'power-apparent-s'
-        ).textContent = `${data.powerApparentS}`;
-        document.getElementById(
-          'power-apparent-t'
-        ).textContent = `${data.powerApparentT}`;
         document.getElementById(
           'power-apparent-total'
         ).textContent = `${data.powerApparentTotal}`;
 
-        // Faktor Daya (PF) per Fasa
+        // Update Data Fasa R
+        document.getElementById('voltage-a').textContent = `${data.voltageA} V`;
+        document.getElementById('current-a').textContent = `${data.currentA} A`;
+        document.getElementById(
+          'power-active-r'
+        ).textContent = `${data.powerActiveR} W`;
+        document.getElementById(
+          'power-reactive-r'
+        ).textContent = `${data.powerReactiveR} Var`;
+        document.getElementById(
+          'power-apparent-r'
+        ).textContent = `${data.powerApparentR} VA`;
         document.getElementById(
           'power-factor-r'
-        ).textContent = `${data.powerFactorR}`;
+        ).textContent = `${data.powerFactorR} PF`;
+
+        // Update Data Fasa S
+        document.getElementById('voltage-b').textContent = `${data.voltageB} V`;
+        document.getElementById('current-b').textContent = `${data.currentB} A`;
+        document.getElementById(
+          'power-active-s'
+        ).textContent = `${data.powerActiveS} W`;
+        document.getElementById(
+          'power-reactive-s'
+        ).textContent = `${data.powerReactiveS} Var`;
+        document.getElementById(
+          'power-apparent-s'
+        ).textContent = `${data.powerApparentS} VA`;
         document.getElementById(
           'power-factor-s'
-        ).textContent = `${data.powerFactorS}`;
+        ).textContent = `${data.powerFactorS} PF`;
+
+        // Update Data Fasa T
+        document.getElementById('voltage-c').textContent = `${data.voltageC} V`;
+        document.getElementById('current-c').textContent = `${data.currentC} A`;
+        document.getElementById(
+          'power-active-t'
+        ).textContent = `${data.powerActiveT} W`;
+        document.getElementById(
+          'power-reactive-t'
+        ).textContent = `${data.powerReactiveT} Var`;
+        document.getElementById(
+          'power-apparent-t'
+        ).textContent = `${data.powerApparentT} VA`;
         document.getElementById(
           'power-factor-t'
-        ).textContent = `${data.powerFactorT}`;
+        ).textContent = `${data.powerFactorT} PF`;
       });
     </script>
   </body>

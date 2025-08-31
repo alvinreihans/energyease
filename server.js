@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import apiRoutes from './routes/apiRoutes.js';
 import { setupMqtt } from './config/mqtt.js';
 
 const app = express();
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/', authRoutes);
 app.use('/', dashboardRoutes);
+app.use('/api', apiRoutes);
 
 setupMqtt(io);
 

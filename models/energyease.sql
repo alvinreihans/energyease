@@ -32,10 +32,49 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Data exporting was unselected.
+-- Tabel untuk menyimpan data mentah yang datang setiap 10 detik
+-- Tambahkan kolom `timestamp` untuk merekam waktu data diterima
+CREATE TABLE IF NOT EXISTS `raw_sensor_data` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `energy_active` FLOAT,
+  `energy_reactive` FLOAT,
+  `total_power_factor` FLOAT,
+  `power_active_total` FLOAT,
+  `power_reactive_total` FLOAT,
+  `power_apparent_total` FLOAT,
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+  `voltage_r` FLOAT,
+  `current_r` FLOAT,
+  `power_active_r` FLOAT,
+  `power_reactive_r` FLOAT,
+  `power_apparent_r` FLOAT,
+  `power_factor_r` FLOAT,
+
+  `voltage_s` FLOAT,
+  `current_s` FLOAT,
+  `power_active_s` FLOAT,
+  `power_reactive_s` FLOAT,
+  `power_apparent_s` FLOAT,
+  `power_factor_s` FLOAT,
+  
+  `voltage_t` FLOAT,
+  `current_t` FLOAT,
+  `power_active_t` FLOAT,
+  `power_reactive_t` FLOAT,
+  `power_apparent_t` FLOAT,
+  `power_factor_t` FLOAT,
+
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan data agregasi per jam
+CREATE TABLE IF NOT EXISTS `hourly_summary` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `start_time` DATETIME NOT NULL UNIQUE,
+  `avg_energy_active` FLOAT,
+  `avg_energy_reactive` FLOAT,
+  `avg_total_power_factor` FLOAT,
+  `avg_power_active_total` FLOAT,
+  `avg_power_reactive_total` FLOAT,
+  `avg_power_apparent_total` FLOAT
+);
