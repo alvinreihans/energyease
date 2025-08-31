@@ -161,25 +161,31 @@
 
       <div class="ike-container">
         <h2>Indeks Konsumsi Energi Listrik</h2>
-        <div id="ikeStatus" class="ike-status">Loading...</div>
+        <div id="ike-status" class="ike-status">Loading...</div>
         <div class="ike-value-box">
           <div class="label">Nilai IKE</div>
-          <div class="value" id="ikeValue">-- kWh/m²/bulan</div>
+          <div class="value" id="ike-value">-- kWh/m²/bulan</div>
         </div>
       </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const luasBangunan = 200; // Sesuaikan dengan kebutuhan Anda
-      const ikeStatusEl = document.getElementById('ikeStatus');
-      const ikeValueEl = document.getElementById('ikeValue');
+      function formatNumber(value, decimals = 2, unit = '') {
+        const num = Number(value);
+        if (isNaN(num)) return '-';
+        return `${num.toFixed(decimals)}${unit ? ' ' + unit : ''}`;
+      }
+
+      const luasBangunan = 127.548; // Sesuaikan dengan kebutuhan Anda
+      const ikeStatusEl = document.getElementById('ike-status');
+      const ikeValueEl = document.getElementById('ike-value');
 
       const socket = io();
 
       socket.on('sensor-data', (data) => {
-        const energi = parseFloat(data.energi);
-        const ike = energi / luasBangunan;
+        const energi = formatNumber(data.energyActive);
+        const ike = (energi * 30) / luasBangunan;
 
         ikeValueEl.textContent = ike.toFixed(2) + ' kWh/m²/bulan';
 
