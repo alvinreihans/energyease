@@ -221,11 +221,11 @@
           <div class="phase-data">
             <div class="data-row">
               <span class="label">Tegangan:</span>
-              <span class="value" id="voltage-a">- V</span>
+              <span class="value" id="voltage-r">- V</span>
             </div>
             <div class="data-row">
               <span class="label">Arus:</span>
-              <span class="value" id="current-a">- A</span>
+              <span class="value" id="current-r">- A</span>
             </div>
             <div class="data-row">
               <span class="label">Daya Aktif:</span>
@@ -251,11 +251,11 @@
           <div class="phase-data">
             <div class="data-row">
               <span class="label">Tegangan:</span>
-              <span class="value" id="voltage-b">- V</span>
+              <span class="value" id="voltage-s">- V</span>
             </div>
             <div class="data-row">
               <span class="label">Arus:</span>
-              <span class="value" id="current-b">- A</span>
+              <span class="value" id="current-s">- A</span>
             </div>
             <div class="data-row">
               <span class="label">Daya Aktif:</span>
@@ -281,11 +281,11 @@
           <div class="phase-data">
             <div class="data-row">
               <span class="label">Tegangan:</span>
-              <span class="value" id="voltage-c">- V</span>
+              <span class="value" id="voltage-t">- V</span>
             </div>
             <div class="data-row">
               <span class="label">Arus:</span>
-              <span class="value" id="current-c">- A</span>
+              <span class="value" id="current-t">- A</span>
             </div>
             <div class="data-row">
               <span class="label">Daya Aktif:</span>
@@ -307,77 +307,129 @@
         </div>
       </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
 
+      // Helper untuk format angka
+      function formatNumber(value, decimals = 2, unit = '') {
+        const num = Number(value);
+        if (isNaN(num)) return '-';
+        return `${num.toFixed(decimals)}${unit ? ' ' + unit : ''}`;
+      }
+
       socket.on('sensor-data', (data) => {
-        // Update Ringkasan Utama
-        document.getElementById(
-          'energy-active'
-        ).textContent = `${data.energyActive}`;
-        document.getElementById(
-          'energy-reactive'
-        ).textContent = `${data.energyReactive}`;
-        document.getElementById(
-          'total-power-factor'
-        ).textContent = `${data.totalPowerFactor}`;
-        document.getElementById(
-          'power-active-total'
-        ).textContent = `${data.powerActiveTotal}`;
-        document.getElementById(
-          'power-reactive-total'
-        ).textContent = `${data.powerReactiveTotal}`;
-        document.getElementById(
-          'power-apparent-total'
-        ).textContent = `${data.powerApparentTotal}`;
+        // Ringkasan Utama
+        document.getElementById('energy-active').textContent = formatNumber(
+          data.energyActive
+        );
+        document.getElementById('energy-reactive').textContent = formatNumber(
+          data.energyReactive
+        );
+        document.getElementById('total-power-factor').textContent =
+          formatNumber(data.totalPowerFactor);
+        document.getElementById('power-active-total').textContent =
+          formatNumber(data.powerActiveTotal);
+        document.getElementById('power-reactive-total').textContent =
+          formatNumber(data.powerReactiveTotal);
+        document.getElementById('power-apparent-total').textContent =
+          formatNumber(data.powerApparentTotal);
 
-        // Update Data Fasa R
-        document.getElementById('voltage-a').textContent = `${data.voltageA} V`;
-        document.getElementById('current-a').textContent = `${data.currentA} A`;
-        document.getElementById(
-          'power-active-r'
-        ).textContent = `${data.powerActiveR} W`;
-        document.getElementById(
-          'power-reactive-r'
-        ).textContent = `${data.powerReactiveR} Var`;
-        document.getElementById(
-          'power-apparent-r'
-        ).textContent = `${data.powerApparentR} VA`;
-        document.getElementById(
-          'power-factor-r'
-        ).textContent = `${data.powerFactorR} PF`;
+        // Fasa R
+        document.getElementById('voltage-r').textContent = formatNumber(
+          data.voltageR,
+          2,
+          'V'
+        );
+        document.getElementById('current-r').textContent = formatNumber(
+          data.currentR,
+          2,
+          'A'
+        );
+        document.getElementById('power-active-r').textContent = formatNumber(
+          data.powerActiveR,
+          2,
+          'W'
+        );
+        document.getElementById('power-reactive-r').textContent = formatNumber(
+          data.powerReactiveR,
+          2,
+          'Var'
+        );
+        document.getElementById('power-apparent-r').textContent = formatNumber(
+          data.powerApparentR,
+          2,
+          'VA'
+        );
+        document.getElementById('power-factor-r').textContent = formatNumber(
+          data.powerFactorR,
+          2,
+          'PF'
+        );
 
-        // Update Data Fasa S
-        document.getElementById('voltage-b').textContent = `${data.voltageB} V`;
-        document.getElementById('current-b').textContent = `${data.currentB} A`;
-        document.getElementById(
-          'power-active-s'
-        ).textContent = `${data.powerActiveS} W`;
-        document.getElementById(
-          'power-reactive-s'
-        ).textContent = `${data.powerReactiveS} Var`;
-        document.getElementById(
-          'power-apparent-s'
-        ).textContent = `${data.powerApparentS} VA`;
-        document.getElementById(
-          'power-factor-s'
-        ).textContent = `${data.powerFactorS} PF`;
+        // Fasa S
+        document.getElementById('voltage-s').textContent = formatNumber(
+          data.voltageS,
+          2,
+          'V'
+        );
+        document.getElementById('current-s').textContent = formatNumber(
+          data.currentS,
+          2,
+          'A'
+        );
+        document.getElementById('power-active-s').textContent = formatNumber(
+          data.powerActiveS,
+          2,
+          'W'
+        );
+        document.getElementById('power-reactive-s').textContent = formatNumber(
+          data.powerReactiveS,
+          2,
+          'Var'
+        );
+        document.getElementById('power-apparent-s').textContent = formatNumber(
+          data.powerApparentS,
+          2,
+          'VA'
+        );
+        document.getElementById('power-factor-s').textContent = formatNumber(
+          data.powerFactorS,
+          2,
+          'PF'
+        );
 
-        // Update Data Fasa T
-        document.getElementById('voltage-c').textContent = `${data.voltageC} V`;
-        document.getElementById('current-c').textContent = `${data.currentC} A`;
-        document.getElementById(
-          'power-active-t'
-        ).textContent = `${data.powerActiveT} W`;
-        document.getElementById(
-          'power-reactive-t'
-        ).textContent = `${data.powerReactiveT} Var`;
-        document.getElementById(
-          'power-apparent-t'
-        ).textContent = `${data.powerApparentT} VA`;
-        document.getElementById(
-          'power-factor-t'
-        ).textContent = `${data.powerFactorT} PF`;
+        // Fasa T
+        document.getElementById('voltage-t').textContent = formatNumber(
+          data.voltageT,
+          2,
+          'V'
+        );
+        document.getElementById('current-t').textContent = formatNumber(
+          data.currentT,
+          2,
+          'A'
+        );
+        document.getElementById('power-active-t').textContent = formatNumber(
+          data.powerActiveT,
+          2,
+          'W'
+        );
+        document.getElementById('power-reactive-t').textContent = formatNumber(
+          data.powerReactiveT,
+          2,
+          'Var'
+        );
+        document.getElementById('power-apparent-t').textContent = formatNumber(
+          data.powerApparentT,
+          2,
+          'VA'
+        );
+        document.getElementById('power-factor-t').textContent = formatNumber(
+          data.powerFactorT,
+          2,
+          'PF'
+        );
       });
     </script>
   </body>
