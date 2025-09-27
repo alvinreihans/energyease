@@ -160,6 +160,24 @@
       .button-group .button-off:hover {
         background-color: var(--button-off-hover);
       }
+
+      button:disabled {
+        background-color: #ccc !important;
+        color: #666 !important;
+        cursor: not-allowed !important;
+        opacity: 0.6;
+      }
+
+      .restriction-banner {
+        background: #ffe6e6;
+        border: 1px solid #ff4d4d;
+        color: #c0392b;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        text-align: center;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -176,6 +194,13 @@
           <span class="user-name">Halo, User!</span>
           <div class="avatar"><i class="fas fa-user"></i></div>
         </div>
+      </div>
+
+      <div
+        id="restriction-notice"
+        class="restriction-banner"
+        style="display: none">
+        ⏰ Kontrol tidak tersedia pada pukul 07.00 - 18.00 WIB
       </div>
 
       <div class="control-grid">
@@ -305,19 +330,49 @@
     <script>
       const socket = io();
 
+      // Cek waktu sekarang
+      function isRestrictedTime() {
+        const hour = new Date().getHours();
+        return hour >= 7 && hour < 18;
+      }
+
+      // Nonaktifkan tombol jika jam terlarang
+      function updateButtonAvailability() {
+        const buttons = document.querySelectorAll('.button-group button');
+        const restrictionNotice = document.getElementById('restriction-notice');
+
+        if (isRestrictedTime()) {
+          buttons.forEach((btn) => btn.setAttribute('disabled', 'disabled'));
+          restrictionNotice.style.display = 'block';
+        } else {
+          buttons.forEach((btn) => btn.removeAttribute('disabled'));
+          restrictionNotice.style.display = 'none';
+        }
+      }
+
+      // Jalankan saat halaman selesai dimuat
+      document.addEventListener('DOMContentLoaded', () => {
+        updateButtonAvailability();
+        setInterval(updateButtonAvailability, 60 * 1000); // cek ulang tiap menit
+      });
+
       // Kirim perintah ke server
       function publishMessage(deviceId, command) {
         socket.emit('command', { deviceId, command });
         console.log(`[SOCKET] Command '${command}' for ${deviceId} emitted`);
       }
 
-      // Terima update status device dari server
+      // Update status device dari server
       socket.on('device-status', ({ deviceId, status }) => {
-        console.log(`[SOCKET] Status update: ${deviceId} -> ${status}`);
         updateDeviceStatus(deviceId, status);
       });
 
-      // Fungsi update UI (tetap sama)
+      // Terima notifikasi command ditolak
+      socket.on('command-rejected', ({ deviceId, command, reason }) => {
+        alert(`⛔ Perintah '${command}' untuk ${deviceId} ditolak: ${reason}`);
+      });
+
+      // Fungsi update UI
       function updateDeviceStatus(deviceId, status) {
         const statusElement = document.getElementById(`status-${deviceId}`);
         if (statusElement) {

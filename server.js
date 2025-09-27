@@ -50,6 +50,20 @@ io.on('connection', (socket) => {
 
   // Listen perintah dari browser
   socket.on('command', ({ deviceId, command }) => {
+    const hour = 10;
+
+    if (hour >= 7 && hour < 18) {
+      console.log(
+        `⛔ Command '${command}' for ${deviceId} ditolak (jam terlarang)`
+      );
+      socket.emit('command-rejected', {
+        deviceId,
+        command,
+        reason: 'Kontrol tidak tersedia pada jam 07.00 - 18.00',
+      });
+      return;
+    }
+
     const topic = `energyease888/command/${deviceId}`;
     mqttClient.publish(topic, command);
     console.log(`📤 Command '${command}' sent to ${topic}`);
