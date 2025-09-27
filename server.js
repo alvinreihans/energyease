@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
   socket.on('command', ({ deviceId, command }) => {
     const hour = new Date().getHours();
 
+    // Restriction jam 07–18
     if (hour >= 7 && hour < 18) {
       console.log(
         `⛔ Command '${command}' for ${deviceId} ditolak (jam terlarang)`
@@ -64,9 +65,15 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // Publish ke MQTT
     const topic = `energyease888/command/${deviceId}`;
     mqttClient.publish(topic, command);
     console.log(`📤 Command '${command}' sent to ${topic}`);
+
+    // 👉 Hanya simulasi status kalau device adalah AC
+    if (deviceId.startsWith('ac')) {
+      mqttClient.publish(`energyease888/status/${deviceId}`, command);
+    }
   });
 });
 
