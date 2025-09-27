@@ -15,9 +15,15 @@ mqttClient.on('error', (err) => {
 // Tambahkan fungsi ini
 const setupMqtt = (io) => {
   mqttClient.subscribe('energyease888/sensor');
+  mqttClient.subscribe('energyease888/status/#'); // tambahkan untuk status device
 
   mqttClient.on('message', (topic, message) => {
-    handleMqttMessage(io, topic, message);
+    if (topic.startsWith('energyease888/status/')) {
+      const deviceId = topic.split('/').pop();
+      io.emit('device-status', { deviceId, status: message.toString() });
+    } else {
+      handleMqttMessage(io, topic, message);
+    }
   });
 };
 

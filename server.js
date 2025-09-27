@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import apiRoutes from './routes/apiRoutes.js';
-import { setupMqtt } from './config/mqtt.js';
+import { setupMqtt, mqttClient } from './config/mqtt.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -45,6 +45,16 @@ app.use('/', dashboardRoutes);
 app.use('/api', apiRoutes);
 
 setupMqtt(io);
+io.on('connection', (socket) => {
+  console.log('🔌 Client connected via socket.io');
+
+  // Listen perintah dari browser
+  socket.on('command', ({ deviceId, command }) => {
+    const topic = `energyease888/command/${deviceId}`;
+    mqttClient.publish(topic, command);
+    console.log(`📤 Command '${command}' sent to ${topic}`);
+  });
+});
 
 // Jalankan server
 const PORT = process.env.PORT || 3000;
