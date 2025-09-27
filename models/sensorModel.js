@@ -2,7 +2,7 @@
 import db from '../config/db.js';
 
 // Fungsi untuk menyimpan data mentah ke tabel `raw_sensor_data`
-export async function saveRawSensorData(data) {
+export const saveRawSensorData = async (data) => {
   try {
     await db.query(
       `INSERT INTO raw_sensor_data (
@@ -41,19 +41,19 @@ export async function saveRawSensorData(data) {
   } catch (error) {
     console.error('Error saving raw sensor data:', error);
   }
-}
+};
 
 // Fungsi untuk mengambil data agregasi per jam dari database
-export async function getHourlyData(date) {
+export const getHourlyData = async (date) => {
   const [rows] = await db.query(
     'SELECT * FROM hourly_summary WHERE DATE(start_time) = ? ORDER BY start_time ASC',
     [date]
   );
   return rows;
-}
+};
 
 // fungsi query untuk ambil data raw per jam:
-export async function getRawSensorDataByHour(startTime, endTime) {
+export const getRawSensorDataByHour = async (startTime, endTime) => {
   const [rows] = await db.query(
     `SELECT * FROM raw_sensor_data 
      WHERE timestamp BETWEEN ? AND ? 
@@ -61,10 +61,10 @@ export async function getRawSensorDataByHour(startTime, endTime) {
     [startTime, endTime]
   );
   return rows;
-}
+};
 
 // Fungsi untuk menyimpan hasil agregasi
-export async function saveHourlySummary(data) {
+export const saveHourlySummary = async (data) => {
   const {
     startTime,
     avgEnergyActive,
@@ -98,4 +98,4 @@ export async function saveHourlySummary(data) {
   } catch (error) {
     console.error('Error saving hourly summary:', error);
   }
-}
+};

@@ -2,8 +2,7 @@ import mqtt from 'mqtt';
 import { handleMqttMessage } from '../controllers/mqttController.js';
 
 // Konfigurasi koneksi MQTT
-const connectUrl = `mqtt://broker.hivemq.com:1883`;
-const mqttClient = mqtt.connect(connectUrl);
+const mqttClient = mqtt.connect(process.env.MQTT_BROKER);
 
 mqttClient.on('connect', () => {
   console.log('✅ MQTT Client connected');

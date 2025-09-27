@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Peringatan IKE Boros</title>
+    <style>
+      body {
+        font-family: 'Poppins', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7f9;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+      .header {
+        background-color: #e74c3c;
+        color: #ffffff;
+        padding: 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .content {
+        padding: 25px;
+        color: #333333;
+        line-height: 1.6;
+        font-size: 14px;
+      }
+      .data-box {
+        background-color: #ffeaea;
+        border: 1px solid #f9dcdc;
+        padding: 15px 20px;
+        border-radius: 6px;
+        margin: 20px 0;
+      }
+      .data-box h2 {
+        margin: 0 0 12px 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #e74c3c;
+        text-align: center;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .data-table td {
+        padding: 6px 0;
+        font-size: 14px;
+        color: #2c3e50;
+      }
+      .data-table td.label {
+        font-weight: 500;
+      }
+      .data-table td.value {
+        font-weight: 700;
+        text-align: right;
+        color: #e74c3c;
+      }
+      .button {
+        display: inline-block;
+        background-color: #3498db;
+        color: #ffffff !important;
+        padding: 10px 20px;
+        margin-top: 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .footer {
+        background-color: #f4f7f9;
+        padding: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #999999;
+        border-top: 1px solid #eeeeee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- HEADER -->
+      <div class="header">
+        <h1>⚠️ PERINGATAN: IKE Boros!</h1>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <p>Halo, {{username}}</p>
+        <p>
+          Sistem Energy Ease mendeteksi Indeks Konsumsi Energi (IKE) telah
+          mencapai zona <strong>BOROS</strong> pada <strong>{{time}}</strong>.
+          Analisis menunjukkan adanya beban daya yang tidak wajar atau faktor
+          daya yang buruk.
+        </p>
+
+        <!-- DATA BOX -->
+        <div class="data-box">
+          <h2>Nilai IKE {{value}} kWh/m²/bulan</h2>
+          <table class="data-table">
+            <tr>
+              <td class="label">Energi Aktif (Total)</td>
+              <td class="value">{{energyActive}} kWh</td>
+            </tr>
+            <tr>
+              <td class="label">Energi Reaktif (Total)</td>
+              <td class="value">{{energyReactive}} kVarh</td>
+            </tr>
+            <tr>
+              <td class="label">Faktor Daya Total (PF)</td>
+              <td class="value">{{totalPowerFactor}} PF</td>
+            </tr>
+            <tr>
+              <td class="label">Daya Aktif Total (P)</td>
+              <td class="value">{{powerActiveTotal}} W</td>
+            </tr>
+            <tr>
+              <td class="label">Daya Reaktif Total (Q)</td>
+              <td class="value">{{powerReactiveTotal}} Var</td>
+            </tr>
+            <tr>
+              <td class="label">Daya Semu Total (S)</td>
+              <td class="value">{{powerApparentTotal}} VA</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>
+          Disarankan untuk segera memeriksa aktivitas penggunaan listrik Anda,
+          terutama peralatan berdaya tinggi. Nilai-nilai di atas adalah nilai
+          <em>real-time</em> saat notifikasi dipicu.
+        </p>
+
+        <a href="{{process.env.APP_URL}}" class="button">Kunjungi Dashboard</a>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <p>
+          Notifikasi ini dikirim secara otomatis karena IKE terdeteksi Boros.
+        </p>
+        <p>&copy; {{currentYear}} Energy Ease Monitoring.</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -168,39 +168,49 @@
         </div>
       </div>
     </div>
-
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      function formatNumber(value, decimals = 2, unit = '') {
-        const num = Number(value);
-        if (isNaN(num)) return '-';
-        return `${num.toFixed(decimals)}${unit ? ' ' + unit : ''}`;
-      }
-
-      const luasBangunan = 127.548; // Sesuaikan dengan kebutuhan Anda
-      const ikeStatusEl = document.getElementById('ike-status');
-      const ikeValueEl = document.getElementById('ike-value');
+      const ikeStatusElement = document.getElementById('ike-status');
+      const ikeValueElement = document.getElementById('ike-value');
 
       const socket = io();
 
-      socket.on('sensor-data', (data) => {
-        const energi = formatNumber(data.energyActive);
-        const ike = (energi * 30) / luasBangunan;
+      const statusClass = {
+        'Sangat Efisien': 'status-sangat-efisien',
+        Efisien: 'status-efisien',
+        'Cukup Efisien': 'status-cukup-efisien',
+        Boros: 'status-boros',
+      };
 
-        ikeValueEl.textContent = ike.toFixed(2) + ' kWh/m²/bulan';
+      socket.on('IKE', (data) => {
+        try {
+          console.log('[IKE Event diterima]', data); // 🔍 log data asli dari server
 
-        if (ike < 8.5) {
-          ikeStatusEl.textContent = 'Sangat Efisien';
-          ikeStatusEl.className = 'ike-status status-sangat-efisien';
-        } else if (ike < 14) {
-          ikeStatusEl.textContent = 'Efisien';
-          ikeStatusEl.className = 'ike-status status-efisien';
-        } else if (ike < 18.5) {
-          ikeStatusEl.textContent = 'Cukup Efisien';
-          ikeStatusEl.className = 'ike-status status-cukup-efisien';
-        } else {
-          ikeStatusEl.textContent = 'Boros';
-          ikeStatusEl.className = 'ike-status status-boros';
+          if (!data) return;
+
+          const status = String(data.status || '').trim();
+          const rawValue = data.value;
+          const valueNum = Number(rawValue);
+
+          console.log('[IKE Parsed]', { status, valueNum });
+
+          ikeStatusElement.textContent = status || '—';
+          ikeValueElement.textContent = isNaN(valueNum)
+            ? '-- kWh/m²/bulan'
+            : `${valueNum.toFixed(2)} kWh/m²/bulan`;
+
+          // reset class lalu tambahkan class sesuai status
+          ikeStatusElement.className = 'ike-status';
+          if (statusClass[status]) {
+            ikeStatusElement.classList.add(statusClass[status]);
+          }
+
+          console.log('[IKE Updated UI]', {
+            elementClass: ikeStatusElement.className,
+            elementText: ikeStatusElement.textContent,
+          });
+        } catch (e) {
+          console.error('[IKE handler] error:', e);
         }
       });
     </script>
