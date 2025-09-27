@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
 
   // Listen perintah dari browser
   socket.on('command', ({ deviceId, command }) => {
-    const hour = 10;
+    const hour = new Date().getHours();
 
     if (hour >= 7 && hour < 18) {
       console.log(
