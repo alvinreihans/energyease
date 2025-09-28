@@ -16,8 +16,6 @@
         --light-text: #bdc3c7;
         --border-color: #e0e6ed;
         --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-
-        /* Warna Status */
         --status-on: #27ae60;
         --status-off: #e74c3c;
         --button-on-hover: #219653;
@@ -54,30 +52,6 @@
         margin: 0;
       }
 
-      .user-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
-
-      .user-info .user-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--secondary-color);
-      }
-
-      .user-info .avatar {
-        width: 40px;
-        height: 40px;
-        background-color: #ecf0f1;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--secondary-color);
-      }
-
-      /* Tata Letak untuk Panel Kontrol */
       .control-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -178,14 +152,6 @@
         font-weight: 500;
         text-align: center;
       }
-
-      .logout-icon {
-        color: var(--secondary-color);
-        font-size: 20px;
-      }
-      .logout-icon:hover {
-        color: #e74c3c;
-      }
     </style>
     <link
       rel="stylesheet"
@@ -198,11 +164,7 @@
     <div class="main-content">
       <div class="header">
         <h1>Kontrol Perangkat</h1>
-        <div class="user-info">
-          <a href="/logout" id="logout-button-mobile" class="logout-icon"
-            ><i class="fas fa-sign-out-alt"></i
-          ></a>
-        </div>
+        <%- include('partials/logout') %>
       </div>
 
       <div
@@ -239,7 +201,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-ac3">
           <img src="https://via.placeholder.com/100" alt="AC 3" />
           <h3>AC 3</h3>
@@ -253,7 +214,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-lampu1">
           <img src="https://via.placeholder.com/100" alt="Lampu 1" />
           <h3>Lampu 1</h3>
@@ -269,7 +229,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-lampu2">
           <img src="https://via.placeholder.com/100" alt="Lampu 2" />
           <h3>Lampu 2</h3>
@@ -285,7 +244,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-lampu3">
           <img src="https://via.placeholder.com/100" alt="Lampu 3" />
           <h3>Lampu 3</h3>
@@ -301,7 +259,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-lampu4">
           <img src="https://via.placeholder.com/100" alt="Lampu 4" />
           <h3>Lampu 4</h3>
@@ -317,7 +274,6 @@
             </button>
           </div>
         </div>
-
         <div class="control-card" id="device-lampu5">
           <img src="https://via.placeholder.com/100" alt="Lampu 5" />
           <h3>Lampu 5</h3>
@@ -335,6 +291,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Script lain (socket, kontrol, dsb) -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();

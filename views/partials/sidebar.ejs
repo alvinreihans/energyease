@@ -54,21 +54,6 @@
     color: white;
   }
 
-  .sidebar .logout-link {
-    text-decoration: none;
-    color: var(--light-text);
-    display: block;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .sidebar .logout-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-  }
-
   /* ================= BOTTOM NAV (mobile) ================= */
   .bottom-nav {
     display: none;
@@ -125,74 +110,9 @@
     }
   }
 
-  /* ================= LOGOUT MODAL ================= */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    background-color: var(--card-bg-color);
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    max-width: 400px;
-    width: 90%;
-  }
-
-  .modal-content p {
-    font-size: 18px;
-    margin-bottom: 25px;
-    color: var(--secondary-color);
-  }
-
-  .modal-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .modal-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
-
-  #confirm-logout {
-    background-color: #e74c3c;
-    color: white;
-  }
-
-  #confirm-logout:hover {
-    background-color: #c0392b;
-  }
-
-  #cancel-logout {
-    background-color: #ecf0f1;
-    color: var(--secondary-color);
-  }
-
-  #cancel-logout:hover {
-    background-color: #bdc3c7;
-  }
-
   html,
   body {
-    width: 100%;
     max-width: 100%;
-    overflow-x: hidden;
   }
 
   .main-content {
@@ -253,9 +173,6 @@
       </li>
     </ul>
   </nav>
-  <a href="/logout" id="logout-button" class="logout-link"
-    ><i class="fas fa-sign-out-alt"></i> Logout</a
-  >
 </div>
 
 <!-- Bottom Navbar untuk mobile -->
@@ -275,40 +192,3 @@
     ><i class="fas fa-history"></i><span>Riwayat</span></a
   >
 </div>
-
-<!-- Modal Konfirmasi Logout -->
-<div id="logout-modal" class="modal">
-  <div class="modal-content">
-    <p>Apakah Anda yakin ingin keluar?</p>
-    <div class="modal-actions">
-      <button id="confirm-logout">Ya, Keluar</button>
-      <button id="cancel-logout">Batal</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  const logoutButton = document.getElementById('logout-button');
-  const logoutModal = document.getElementById('logout-modal');
-  const confirmLogoutButton = document.getElementById('confirm-logout');
-  const cancelLogoutButton = document.getElementById('cancel-logout');
-
-  if (logoutButton) {
-    logoutButton.addEventListener('click', function (e) {
-      e.preventDefault();
-      logoutModal.style.display = 'flex';
-    });
-  }
-
-  if (confirmLogoutButton) {
-    confirmLogoutButton.addEventListener('click', function () {
-      window.location.href = '/logout';
-    });
-  }
-
-  if (cancelLogoutButton) {
-    cancelLogoutButton.addEventListener('click', function () {
-      logoutModal.style.display = 'none';
-    });
-  }
-</script>

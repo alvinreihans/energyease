@@ -1,0 +1,155 @@
+<style>
+  .logout {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .logout-icon {
+    color: var(--secondary-color);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .logout-icon:hover {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+  }
+
+  /* ================= LOGOUT MODAL ================= */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  .modal-content {
+    background-color: var(--card-bg-color);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    opacity: 0;
+    animation: popUp 0.3s ease forwards;
+    margin: 20px;
+  }
+
+  .modal-content p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: var(--secondary-color);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  #confirm-logout {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  #confirm-logout:hover {
+    background-color: #c0392b;
+  }
+
+  #cancel-logout {
+    background-color: #ecf0f1;
+    color: var(--secondary-color);
+  }
+
+  #cancel-logout:hover {
+    background-color: #bdc3c7;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes popUp {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>
+
+<!-- Modal Konfirmasi Logout -->
+<div id="logout-modal" class="modal">
+  <div class="modal-content">
+    <p>Apakah Anda yakin ingin keluar?</p>
+    <div class="modal-actions">
+      <button id="confirm-logout">Ya, Keluar</button>
+      <button id="cancel-logout">Batal</button>
+    </div>
+  </div>
+</div>
+<div class="logout">
+  <a href="/logout" id="logout-button" class="logout-icon"
+    ><i class="fas fa-sign-out-alt"></i
+  ></a>
+</div>
+
+<!-- Script Logout Modal -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logout-button');
+    const logoutModal = document.getElementById('logout-modal');
+    const confirmLogoutButton = document.getElementById('confirm-logout');
+    const cancelLogoutButton = document.getElementById('cancel-logout');
+
+    logoutButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      logoutModal.style.display = 'flex';
+    });
+
+    confirmLogoutButton.addEventListener('click', () => {
+      window.location.href = '/logout';
+    });
+
+    cancelLogoutButton.addEventListener('click', () => {
+      logoutModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === logoutModal) {
+        logoutModal.style.display = 'none';
+      }
+    });
+  });
+</script>

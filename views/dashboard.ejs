@@ -48,29 +48,6 @@
         margin: 0;
       }
 
-      .user-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
-
-      .user-info .user-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--secondary-color);
-      }
-
-      .user-info .avatar {
-        width: 40px;
-        height: 40px;
-        background-color: #ecf0f1;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--secondary-color);
-      }
-
       /* Gaya Blok Dashboard */
       .dashboard-block {
         background-color: var(--card-bg-color);
@@ -165,14 +142,6 @@
         font-weight: 600;
         color: var(--primary-color);
       }
-
-      .logout-icon {
-        color: var(--secondary-color);
-        font-size: 20px;
-      }
-      .logout-icon:hover {
-        color: #e74c3c;
-      }
     </style>
     <link
       rel="stylesheet"
@@ -184,11 +153,7 @@
     <div class="main-content">
       <div class="header">
         <h1>DASHBOARD</h1>
-        <div class="user-info">
-          <a href="/logout" id="logout-button-mobile" class="logout-icon"
-            ><i class="fas fa-sign-out-alt"></i
-          ></a>
-        </div>
+        <%- include('partials/logout') %>
       </div>
 
       <div class="dashboard-block summary-grid">
