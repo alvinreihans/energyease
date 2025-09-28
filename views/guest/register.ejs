@@ -26,16 +26,21 @@
 
       .back-link {
         position: absolute;
-        top: 25px;
-        left: 25px;
+        top: 20px;
+        left: 20px;
         text-decoration: none;
-        color: #555;
         font-weight: bold;
-        transition: color 0.3s ease;
+        color: #2c3e50;
+        background-color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
       }
 
       .back-link:hover {
-        color: #3498db;
+        background-color: #3498db;
+        color: #fff;
       }
 
       .register-container {
@@ -58,41 +63,41 @@
       .error-message {
         color: #e74c3c;
         background-color: #fdeded;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 20px;
         border: 1px solid #e74c3c;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
       }
 
-      /* New styling for form box and its elements */
+      /* Form box and elements */
       .form-box {
-        text-align: left; /* Align form content to the left */
         width: 100%;
         max-width: 380px;
+        text-align: left;
       }
 
       .form-box p {
         font-size: 16px;
         color: #555;
         margin-bottom: 20px;
-        text-align: center; /* Center the sub-heading */
+        text-align: center;
       }
 
       .form-box label {
         display: block;
         font-size: 14px;
         color: #333;
-        margin-top: 15px; /* Spacing between input groups */
-        margin-bottom: 5px;
         font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 5px;
       }
 
       .form-box input {
         width: 100%;
         padding: 12px;
+        font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        font-size: 16px;
         box-sizing: border-box;
       }
 
@@ -113,7 +118,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        margin-top: 20px; /* Add space above the button */
+        margin-top: 20px;
       }
 
       .form-box button:hover {
@@ -124,17 +129,49 @@
         margin-top: 20px;
         font-size: 14px;
         color: #777;
-        text-align: center; /* Center the link */
+        text-align: center;
       }
 
       .login-link a {
         color: #3498db;
-        text-decoration: none;
         font-weight: bold;
+        text-decoration: none;
       }
 
       .login-link a:hover {
         text-decoration: underline;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .page-title {
+          font-size: 32px;
+        }
+
+        .register-container {
+          width: 90%;
+          padding: 20px;
+        }
+
+        .form-box input,
+        .form-box button {
+          font-size: 14px;
+          padding: 10px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .page-title {
+          font-size: 26px;
+        }
+
+        .register-container {
+          padding: 15px;
+        }
+
+        .form-box label {
+          font-size: 13px;
+        }
       }
     </style>
   </head>
@@ -149,10 +186,8 @@
       <form class="form-box" method="POST" action="/register">
         <% if (error) { %>
         <div class="error-message">
-          <% if (error === 'email_exists') { %>
-          Email sudah terdaftar.
-          <% } else if (error === 'username_exists') { %>
-          Nama pengguna sudah digunakan.
+          <% if (error === 'email_exists') { %> Email sudah terdaftar. <% } else
+          if (error === 'username_exists') { %> Nama pengguna sudah digunakan.
           <% } %>
         </div>
         <% } %>

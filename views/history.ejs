@@ -120,6 +120,32 @@
       .chart-container {
         position: relative;
         height: 300px;
+        width: 100%; /* pastikan penuh parent */
+        overflow: hidden; /* cegah canvas keluar */
+      }
+
+      .chart-container canvas {
+        width: 100% !important; /* paksa canvas ikut lebar card */
+        height: 100% !important; /* paksa tinggi proporsional */
+        display: block;
+      }
+
+      .logout-icon {
+        color: var(--secondary-color);
+        font-size: 20px;
+      }
+      .logout-icon:hover {
+        color: #e74c3c;
+      }
+
+      /* Mobile fix */
+      @media (max-width: 768px) {
+        .chart-grid {
+          grid-template-columns: 1fr; /* 1 kolom saja */
+        }
+        .chart-container {
+          height: 250px; /* lebih ramping di mobile */
+        }
       }
     </style>
     <link
@@ -135,8 +161,9 @@
       <div class="header">
         <h1>Riwayat Data</h1>
         <div class="user-info">
-          <span class="user-name">Halo, User!</span>
-          <div class="avatar"><i class="fas fa-user"></i></div>
+          <a href="/logout" id="logout-button-mobile" class="logout-icon"
+            ><i class="fas fa-sign-out-alt"></i
+          ></a>
         </div>
       </div>
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tentang - Energy Ease</title>
     <style>
+      /* === Global Styles === */
       body {
         margin: 0;
         font-family: sans-serif;
@@ -12,24 +13,30 @@
         color: #333;
         line-height: 1.6;
         min-height: 100vh;
-        /* Solusi: Menambahkan padding atas untuk memberikan ruang bagi tombol */
-        padding-top: 60px;
+        padding-top: 60px; /* Ruang untuk tombol kembali */
       }
 
+      /* === Back Button === */
       .back-link {
         position: absolute;
-        top: 25px;
-        left: 25px;
+        top: 20px;
+        left: 20px;
         text-decoration: none;
-        color: #555;
         font-weight: bold;
-        transition: color 0.3s ease;
+        color: #2c3e50;
+        background-color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
       }
 
       .back-link:hover {
-        color: #3498db;
+        background-color: #3498db;
+        color: #fff;
       }
 
+      /* === Container & Sections === */
       .container {
         max-width: 900px;
         margin: 0 auto;
@@ -53,6 +60,7 @@
         text-align: center;
       }
 
+      /* === About Section === */
       .about-text p {
         font-size: 16px;
         color: #555;
@@ -60,6 +68,7 @@
         margin-bottom: 15px;
       }
 
+      /* === Developer Section === */
       .developer-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -99,6 +108,7 @@
         color: #777;
       }
 
+      /* === Company Contact === */
       .company-contact {
         text-align: center;
       }
@@ -113,6 +123,40 @@
         font-size: 16px;
         margin: 5px 0;
       }
+
+      /* === Responsive Styles === */
+      @media (max-width: 768px) {
+        .section {
+          padding: 20px;
+        }
+
+        .section h2 {
+          font-size: 24px;
+        }
+
+        .about-text p {
+          font-size: 14px;
+        }
+
+        .developer-card img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .developer-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .developer-card h3 {
+          font-size: 18px;
+        }
+
+        .company-contact p {
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -126,9 +170,10 @@
             <strong>Energy Ease</strong> adalah sistem monitoring dan
             pengendalian energi listrik berbasis web yang dirancang untuk
             memberikan kemudahan dalam memantau serta mengontrol konsumsi energi
-            secara real-time. Sistem ini menggunakan teknologi <strong>Internet of
-            Things (IoT)</strong> dengan protokol <strong>MQTT</strong> untuk melakukan komunikasi
-            antara sensor, aktuator, dan aplikasi web.
+            secara real-time. Sistem ini menggunakan teknologi
+            <strong>Internet of Things (IoT)</strong> dengan protokol
+            <strong>MQTT</strong> untuk melakukan komunikasi antara sensor,
+            aktuator, dan aplikasi web.
           </p>
           <p>
             Melalui sistem ini, pengguna dapat memantau parameter kelistrikan
@@ -138,10 +183,10 @@
             digunakan.
           </p>
           <p>
-            Energy Ease dilengkapi pula dengan fitur perhitungan <strong>Indeks
-            Konsumsi Energi (IKE)</strong> serta tampilan histori data dalam bentuk
-            grafik yang informatif, membantu pengguna dalam menganalisis
-            efisiensi energi pada suatu gedung atau ruangan.
+            Energy Ease dilengkapi pula dengan fitur perhitungan
+            <strong>Indeks Konsumsi Energi (IKE)</strong> serta tampilan histori
+            data dalam bentuk grafik yang informatif, membantu pengguna dalam
+            menganalisis efisiensi energi pada suatu gedung atau ruangan.
           </p>
         </div>
       </section>

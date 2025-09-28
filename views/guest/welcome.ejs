@@ -45,28 +45,68 @@
         line-height: 1.6;
       }
 
+      /* Button group */
       .btn-group {
         display: flex;
-        gap: 15px;
-        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
         flex-wrap: wrap;
+        justify-content: center;
       }
 
+      /* Button base */
       .btn {
-        padding: 10px 20px;
+        display: block;
+        width: 100%;
+        max-width: 280px;
+        padding: 14px 20px;
         font-size: 16px;
-        border: 2px solid #3498db;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: transparent;
-        color: #3498db;
-        transition: background-color 0.3s, color 0.3s;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
         text-decoration: none;
+        cursor: pointer;
+        background-color: #ffffff;
+        color: #3498db;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          background-color 0.3s ease, color 0.3s ease;
       }
 
       .btn:hover {
         background-color: #3498db;
-        color: white;
+        color: #ffffff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 28px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+
+        .container {
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .btn-group {
+          gap: 10px;
+        }
+
+        .btn {
+          width: 100%;
+          font-size: 14px;
+          padding: 10px;
+        }
       }
     </style>
   </head>

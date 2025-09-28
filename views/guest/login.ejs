@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Masuk - Energy Ease</title>
     <style>
+      /* === Global Styles === */
       body {
         margin: 0;
         font-family: sans-serif;
@@ -17,6 +18,27 @@
         color: #333;
       }
 
+      /* === Back Button === */
+      .back-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        color: #2c3e50;
+        background-color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .back-link:hover {
+        background-color: #3498db;
+        color: #fff;
+      }
+
+      /* === Page Title === */
       .page-title {
         font-size: 48px;
         font-weight: bold;
@@ -24,20 +46,7 @@
         margin-bottom: 30px;
       }
 
-      .back-link {
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        text-decoration: none;
-        color: #555;
-        font-weight: bold;
-        transition: color 0.3s ease;
-      }
-
-      .back-link:hover {
-        color: #3498db;
-      }
-
+      /* === Login Container === */
       .login-container {
         width: 100%;
         max-width: 400px;
@@ -55,6 +64,7 @@
         margin-bottom: 25px;
       }
 
+      /* === Message Alerts === */
       .error-message {
         color: #e74c3c;
         background-color: #fdeded;
@@ -73,9 +83,9 @@
         border: 1px solid #27ae60;
       }
 
-      /* New styling for form box and its elements */
+      /* === Form Box === */
       .form-box {
-        text-align: left; /* Align form content to the left */
+        text-align: left;
         width: 100%;
         max-width: 380px;
       }
@@ -84,7 +94,7 @@
         font-size: 16px;
         color: #555;
         margin-bottom: 20px;
-        text-align: center; /* Center the sub-heading */
+        text-align: center;
       }
 
       .form-box label {
@@ -122,18 +132,19 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        margin-top: 20px; /* Add space above the button */
+        margin-top: 20px;
       }
 
       .form-box button:hover {
         background-color: #2980b9;
       }
 
+      /* === Register Link === */
       .register-link {
         margin-top: 20px;
         font-size: 14px;
         color: #777;
-        text-align: center; /* Center the link */
+        text-align: center;
       }
 
       .register-link a {
@@ -144,6 +155,38 @@
 
       .register-link a:hover {
         text-decoration: underline;
+      }
+
+      /* === Responsive Styles === */
+      @media (max-width: 768px) {
+        .page-title {
+          font-size: 32px;
+        }
+
+        .login-container {
+          padding: 20px;
+          width: 90%;
+        }
+
+        .form-box input,
+        .form-box button {
+          font-size: 14px;
+          padding: 10px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .page-title {
+          font-size: 26px;
+        }
+
+        .login-container {
+          padding: 15px;
+        }
+
+        .form-box label {
+          font-size: 13px;
+        }
       }
     </style>
   </head>
@@ -178,18 +221,10 @@
         <p>Masuk ke akun Anda</p>
         <form action="/login" method="POST">
           <label for="identifier">Email atau Nama Pengguna</label>
-          <input
-            type="text"
-            name="identifier"
-            id="identifier"
-            required />
+          <input type="text" name="identifier" id="identifier" required />
 
           <label for="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            required />
+          <input type="password" name="password" id="password" required />
 
           <button type="submit">Masuk</button>
         </form>

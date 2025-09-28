@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               8.4.3 - MySQL Community Server - GPL
--- Server OS:                    Win64
+-- Host:                         sql12.freesqldatabase.com
+-- Server version:               5.5.62-0ubuntu0.14.04.1 - (Ubuntu)
+-- Server OS:                    debian-linux-gnu
 -- HeidiSQL Version:             12.8.0.6908
 -- --------------------------------------------------------
 
@@ -14,14 +14,56 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table sql12799345.hourly_summary
+CREATE TABLE IF NOT EXISTS `hourly_summary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `start_time` datetime NOT NULL,
+  `avg_energy_active` float DEFAULT NULL,
+  `avg_energy_reactive` float DEFAULT NULL,
+  `avg_total_power_factor` float DEFAULT NULL,
+  `avg_power_active_total` float DEFAULT NULL,
+  `avg_power_reactive_total` float DEFAULT NULL,
+  `avg_power_apparent_total` float DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `start_time` (`start_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
--- Dumping database structure for energyease
-DROP DATABASE IF EXISTS `energyease`;
-CREATE DATABASE IF NOT EXISTS `energyease` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `energyease`;
+-- Data exporting was unselected.
 
--- Dumping structure for table energyease.users
-DROP TABLE IF EXISTS `users`;
+-- Dumping structure for table sql12799345.raw_sensor_data
+CREATE TABLE IF NOT EXISTS `raw_sensor_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `energy_active` float DEFAULT NULL,
+  `energy_reactive` float DEFAULT NULL,
+  `total_power_factor` float DEFAULT NULL,
+  `power_active_total` float DEFAULT NULL,
+  `power_reactive_total` float DEFAULT NULL,
+  `power_apparent_total` float DEFAULT NULL,
+  `voltage_r` float DEFAULT NULL,
+  `current_r` float DEFAULT NULL,
+  `power_active_r` float DEFAULT NULL,
+  `power_reactive_r` float DEFAULT NULL,
+  `power_apparent_r` float DEFAULT NULL,
+  `power_factor_r` float DEFAULT NULL,
+  `voltage_s` float DEFAULT NULL,
+  `current_s` float DEFAULT NULL,
+  `power_active_s` float DEFAULT NULL,
+  `power_reactive_s` float DEFAULT NULL,
+  `power_apparent_s` float DEFAULT NULL,
+  `power_factor_s` float DEFAULT NULL,
+  `voltage_t` float DEFAULT NULL,
+  `current_t` float DEFAULT NULL,
+  `power_active_t` float DEFAULT NULL,
+  `power_reactive_t` float DEFAULT NULL,
+  `power_apparent_t` float DEFAULT NULL,
+  `power_factor_t` float DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2198 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table sql12799345.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` varchar(255) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
@@ -30,51 +72,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Tabel untuk menyimpan data mentah yang datang setiap 10 detik
--- Tambahkan kolom `timestamp` untuk merekam waktu data diterima
-CREATE TABLE IF NOT EXISTS `raw_sensor_data` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `energy_active` FLOAT,
-  `energy_reactive` FLOAT,
-  `total_power_factor` FLOAT,
-  `power_active_total` FLOAT,
-  `power_reactive_total` FLOAT,
-  `power_apparent_total` FLOAT,
+-- Data exporting was unselected.
 
-  `voltage_r` FLOAT,
-  `current_r` FLOAT,
-  `power_active_r` FLOAT,
-  `power_reactive_r` FLOAT,
-  `power_apparent_r` FLOAT,
-  `power_factor_r` FLOAT,
-
-  `voltage_s` FLOAT,
-  `current_s` FLOAT,
-  `power_active_s` FLOAT,
-  `power_reactive_s` FLOAT,
-  `power_apparent_s` FLOAT,
-  `power_factor_s` FLOAT,
-  
-  `voltage_t` FLOAT,
-  `current_t` FLOAT,
-  `power_active_t` FLOAT,
-  `power_reactive_t` FLOAT,
-  `power_apparent_t` FLOAT,
-  `power_factor_t` FLOAT,
-
-  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabel untuk menyimpan data agregasi per jam
-CREATE TABLE IF NOT EXISTS `hourly_summary` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `start_time` DATETIME NOT NULL UNIQUE,
-  `avg_energy_active` FLOAT,
-  `avg_energy_reactive` FLOAT,
-  `avg_total_power_factor` FLOAT,
-  `avg_power_active_total` FLOAT,
-  `avg_power_reactive_total` FLOAT,
-  `avg_power_apparent_total` FLOAT
-);
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
