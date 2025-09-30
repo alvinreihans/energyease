@@ -191,7 +191,7 @@
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+    <a href="/energyease" class="back-link">&larr; Kembali ke Beranda</a>
 
     <h1 class="page-title">Masuk</h1>
 
@@ -199,21 +199,13 @@
       <div class="login-title">Energy Ease</div>
 
       <div class="form-box">
-        <% 
-          let message = '';
-          if (success == 'register_success') {
-              message = 'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.';
-          } else if (success == 'logout_success') {
-              message = 'Anda telah keluar.';
-          } else if (error == 'user_not_found') {
-              message = 'Akun tidak ditemukan';
-          } else if (error == 'wrong_password') {
-              message = 'Kata sandi salah.';
-          } else if (error == 'unauthenticated') {
-            message = 'Silakan masuk terlebih dahulu.'
-          }
-        %>
-        <% if (message) { %>
+        <% let message = ''; if (success == 'register_success') { message =
+        'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.'; } else if
+        (success == 'logout_success') { message = 'Anda telah keluar.'; } else
+        if (error == 'user_not_found') { message = 'Akun tidak ditemukan'; }
+        else if (error == 'wrong_password') { message = 'Kata sandi salah.'; }
+        else if (error == 'unauthenticated') { message = 'Silakan masuk terlebih
+        dahulu.' } %> <% if (message) { %>
         <div class="<%= success ? 'success-message' : 'error-message' %>">
           <%= message %>
         </div>
@@ -230,7 +222,7 @@
         </form>
 
         <div class="register-link">
-          Tidak punya akun? <a href="/register">Daftar</a>
+          Tidak punya akun? <a href="/energyease/register">Daftar</a>
         </div>
       </div>
     </div>
