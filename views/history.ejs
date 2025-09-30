@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Energy Ease - Riwayat Data</title>
     <style>
-      /* Import font dan variabel tema */
       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
       :root {
         --primary-color: #3498db;
@@ -44,7 +43,6 @@
         margin: 0;
       }
 
-      /* Gaya Khusus untuk Halaman Riwayat */
       .history-card {
         background-color: var(--card-bg-color);
         border-radius: 12px;
@@ -52,7 +50,6 @@
         box-shadow: var(--shadow);
         margin-bottom: 25px;
       }
-      /* Perubahan utama: Flexbox pada header card */
       .history-card .card-header {
         font-size: 22px;
         font-weight: 600;
@@ -71,7 +68,7 @@
         font-family: 'Poppins', sans-serif;
         box-sizing: border-box;
       }
-      /* Gaya Tabel */
+
       .history-table {
         width: 100%;
         border-collapse: collapse;
@@ -92,7 +89,7 @@
       .history-table tr:hover {
         background-color: #f9f9f9;
       }
-      /* Gaya Chart */
+
       .chart-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -101,23 +98,21 @@
       .chart-container {
         position: relative;
         height: 300px;
-        width: 100%; /* pastikan penuh parent */
-        overflow: hidden; /* cegah canvas keluar */
+        width: 100%;
+        overflow: hidden;
       }
-
       .chart-container canvas {
-        width: 100% !important; /* paksa canvas ikut lebar card */
-        height: 100% !important; /* paksa tinggi proporsional */
+        width: 100% !important;
+        height: 100% !important;
         display: block;
       }
 
-      /* Mobile fix */
       @media (max-width: 768px) {
         .chart-grid {
-          grid-template-columns: 1fr; /* 1 kolom saja */
+          grid-template-columns: 1fr;
         }
         .chart-container {
-          height: 250px; /* lebih ramping di mobile */
+          height: 250px;
         }
       }
     </style>
@@ -150,6 +145,8 @@
                 <th>Waktu</th>
                 <th>Energi Aktif (kWh)</th>
                 <th>Daya Aktif (W)</th>
+                <th>Energi Reaktif (kVARh)</th>
+                <th>Daya Reaktif (VAR)</th>
                 <th>Faktor Daya</th>
               </tr>
             </thead>
@@ -168,6 +165,12 @@
             <canvas id="dayaChart"></canvas>
           </div>
           <div class="chart-container">
+            <canvas id="energiReaktifChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="dayaReaktifChart"></canvas>
+          </div>
+          <div class="chart-container">
             <canvas id="pfChart"></canvas>
           </div>
         </div>
@@ -175,15 +178,14 @@
     </div>
 
     <script>
-      let energiChart, dayaChart, pfChart;
+      let energiChart, dayaChart, energiReaktifChart, dayaReaktifChart, pfChart;
       const socket = io();
-      let currentHourData = null; // Variable untuk menyimpan data jam berjalan
+      let currentHourData = null;
 
       async function fetchData(date) {
         try {
           const response = await fetch(`/api/history?date=${date}`);
-          const data = await response.json();
-          return data;
+          return await response.json();
         } catch (error) {
           console.error('Failed to fetch historical data:', error);
           return [];
@@ -206,6 +208,14 @@
             <td>${(d.avg_power_active_total || d.powerActiveTotal).toFixed(
               2
             )}</td>
+            <td>${(d.avg_energy_reactive || d.energyReactive || 0).toFixed(
+              2
+            )}</td>
+            <td>${(
+              d.avg_power_reactive_total ||
+              d.powerReactiveTotal ||
+              0
+            ).toFixed(2)}</td>
             <td>${(d.avg_total_power_factor || d.totalPowerFactor).toFixed(
               2
             )}</td>
@@ -225,12 +235,20 @@
         const dayaData = dataArray.map(
           (d) => d.avg_power_active_total || d.powerActiveTotal
         );
+        const energiReaktifData = dataArray.map(
+          (d) => d.avg_energy_reactive || d.energyReactive || 0
+        );
+        const dayaReaktifData = dataArray.map(
+          (d) => d.avg_power_reactive_total || d.powerReactiveTotal || 0
+        );
         const pfData = dataArray.map(
           (d) => d.avg_total_power_factor || d.totalPowerFactor
         );
 
         if (energiChart) energiChart.destroy();
         if (dayaChart) dayaChart.destroy();
+        if (energiReaktifChart) energiReaktifChart.destroy();
+        if (dayaReaktifChart) dayaReaktifChart.destroy();
         if (pfChart) pfChart.destroy();
 
         energiChart = new Chart(document.getElementById('energiChart'), {
@@ -239,7 +257,7 @@
             labels,
             datasets: [
               {
-                label: 'Energi (kWh)',
+                label: 'Energi Aktif (kWh)',
                 data: energiData,
                 borderColor: '#3498db',
                 backgroundColor: 'rgba(52, 152, 219, 0.2)',
@@ -257,7 +275,7 @@
             labels,
             datasets: [
               {
-                label: 'Daya (W)',
+                label: 'Daya Aktif (W)',
                 data: dayaData,
                 borderColor: '#2ecc71',
                 backgroundColor: 'rgba(46, 204, 113, 0.2)',
@@ -268,6 +286,48 @@
           },
           options: { responsive: true, maintainAspectRatio: false },
         });
+
+        energiReaktifChart = new Chart(
+          document.getElementById('energiReaktifChart'),
+          {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Energi Reaktif (kVARh)',
+                  data: energiReaktifData,
+                  borderColor: '#9b59b6',
+                  backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: { responsive: true, maintainAspectRatio: false },
+          }
+        );
+
+        dayaReaktifChart = new Chart(
+          document.getElementById('dayaReaktifChart'),
+          {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Daya Reaktif (VAR)',
+                  data: dayaReaktifData,
+                  borderColor: '#e74c3c',
+                  backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: { responsive: true, maintainAspectRatio: false },
+          }
+        );
 
         pfChart = new Chart(document.getElementById('pfChart'), {
           type: 'line',
@@ -291,16 +351,17 @@
       async function updateData(selectedDate) {
         const hourlyData = await fetchData(selectedDate);
 
-        // Gabungkan data historis dan data jam berjalan (jika ada)
         let combinedData = [...hourlyData];
         if (currentHourData) {
-          // Cek apakah data jam berjalan adalah untuk tanggal yang sama
           const currentHourDate = new Date().toISOString().split('T')[0];
           if (currentHourDate === selectedDate) {
             combinedData.push({
               start_time: new Date(),
               avg_energy_active: currentHourData.avgEnergyActive,
               avg_power_active_total: currentHourData.avgPowerActiveTotal,
+              avg_energy_reactive: currentHourData.avgEnergyReactive || 0,
+              avg_power_reactive_total:
+                currentHourData.avgPowerReactiveTotal || 0,
               avg_total_power_factor: currentHourData.avgTotalPowerFactor,
             });
           }
@@ -309,14 +370,12 @@
         updateTableAndCharts(combinedData);
       }
 
-      // Mendengarkan pembaruan data real-time jam berjalan
       socket.on('real-time-hourly-data', (data) => {
         currentHourData = data;
         const dateInput = document.getElementById('filter-date');
         updateData(dateInput.value);
       });
 
-      // Mendengarkan pembaruan data historis (setelah agregasi selesai)
       socket.on('hourly-data-updated', () => {
         const dateInput = document.getElementById('filter-date');
         updateData(dateInput.value);

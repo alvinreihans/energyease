@@ -6,7 +6,6 @@
     <title>Energy Ease - Kontrol Panel</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
       :root {
         --primary-color: #3498db;
         --secondary-color: #2c3e50;
@@ -21,7 +20,6 @@
         --button-on-hover: #219653;
         --button-off-hover: #c0392b;
       }
-
       body {
         font-family: 'Poppins', sans-serif;
         background-color: var(--background-color);
@@ -31,33 +29,48 @@
         color: var(--text-color);
         margin-left: 280px;
       }
-
       .main-content {
         flex: 1;
         padding: 30px;
         overflow-y: auto;
       }
-
       .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+        gap: 10px;
       }
-
       .header h1 {
         font-size: 32px;
         font-weight: 600;
         color: var(--secondary-color);
         margin: 0;
       }
-
+      .testmode-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.3s;
+      }
+      .testmode-btn.active {
+        background: var(--status-on);
+      }
+      .section-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 25px 0 15px;
+      }
       .control-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 25px;
       }
-
       .control-card {
         background-color: var(--card-bg-color);
         border-radius: 12px;
@@ -67,22 +80,18 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        transition: transform 0.3s ease;
       }
-
       .control-card img {
         width: 80px;
         height: auto;
         margin-bottom: 15px;
       }
-
       .control-card h3 {
         font-size: 20px;
         font-weight: 600;
         color: var(--secondary-color);
         margin: 0 0 10px 0;
       }
-
       .status-indicator {
         font-size: 14px;
         font-weight: 500;
@@ -91,22 +100,18 @@
         color: white;
         margin-bottom: 20px;
       }
-
       .status-indicator.on {
         background-color: var(--status-on);
       }
-
       .status-indicator.off {
         background-color: var(--status-off);
       }
-
       .button-group {
         display: flex;
         gap: 10px;
         width: 100%;
         justify-content: center;
       }
-
       .button-group button {
         flex: 1;
         padding: 12px;
@@ -118,30 +123,24 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
       }
-
       .button-group .button-on {
         background-color: var(--status-on);
       }
-
       .button-group .button-off {
         background-color: var(--status-off);
       }
-
       .button-group .button-on:hover {
         background-color: var(--button-on-hover);
       }
-
       .button-group .button-off:hover {
         background-color: var(--button-off-hover);
       }
-
       button:disabled {
         background-color: #ccc !important;
         color: #666 !important;
         cursor: not-allowed !important;
         opacity: 0.6;
       }
-
       .restriction-banner {
         background: #ffe6e6;
         border: 1px solid #ff4d4d;
@@ -152,21 +151,39 @@
         font-weight: 500;
         text-align: center;
       }
+      .testmode-banner {
+        background: #e8f7ed;
+        border: 1px solid #27ae60;
+        color: #27ae60;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        text-align: center;
+        display: none;
+      }
     </style>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   </head>
   <body>
     <%- include('partials/sidebar', { activePage: 'control' }) %>
-
     <div class="main-content">
       <div class="header">
         <h1>Kontrol Perangkat</h1>
+        <button id="toggle-testmode" class="testmode-btn">
+          Aktifkan Test Mode
+        </button>
         <%- include('partials/logout') %>
       </div>
 
+      <!-- Banner Test Mode -->
+      <div id="testmode-banner" class="testmode-banner">
+        ⚡ Test Mode Aktif — Semua pembatasan jam dinonaktifkan
+      </div>
+
+      <!-- Banner Pembatasan Jam -->
       <div
         id="restriction-notice"
         class="restriction-banner"
@@ -174,172 +191,142 @@
         ⏰ Kontrol tidak tersedia pada pukul 07.00 - 18.00 WIB
       </div>
 
+      <!-- ================= AC ================= -->
+      <div class="section-title">Kontrol AC</div>
       <div class="control-grid">
-        <div class="control-card" id="device-ac1">
-          <img src="https://via.placeholder.com/100" alt="AC 1" />
-          <h3>AC 1</h3>
-          <div class="status-indicator off" id="status-ac1">OFF</div>
+        <% ['ac1','ac2','ac3'].forEach((id,i)=> { %>
+        <div class="control-card" id="device-<%= id %>">
+          <img src="images/AC.png" alt="AC <%= i+1 %>" />
+          <h3>AC <%= i+1 %></h3>
+          <div class="status-indicator off" id="status-<%= id %>">OFF</div>
           <div class="button-group">
-            <button class="button-on" onclick="publishMessage('ac1', 'ON')">
-              Hidupkan
-            </button>
-            <button class="button-off" onclick="publishMessage('ac1', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
-        <div class="control-card" id="device-ac2">
-          <img src="https://via.placeholder.com/100" alt="AC 2" />
-          <h3>AC 2</h3>
-          <div class="status-indicator off" id="status-ac2">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('ac2', 'ON')">
-              Hidupkan
-            </button>
-            <button class="button-off" onclick="publishMessage('ac2', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
-        <div class="control-card" id="device-ac3">
-          <img src="https://via.placeholder.com/100" alt="AC 3" />
-          <h3>AC 3</h3>
-          <div class="status-indicator off" id="status-ac3">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('ac3', 'ON')">
-              Hidupkan
-            </button>
-            <button class="button-off" onclick="publishMessage('ac3', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
-        <div class="control-card" id="device-lampu1">
-          <img src="https://via.placeholder.com/100" alt="Lampu 1" />
-          <h3>Lampu 1</h3>
-          <div class="status-indicator off" id="status-lampu1">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('lampu1', 'ON')">
+            <button
+              class="button-on"
+              onclick="publishMessage('<%= id %>','ON')">
               Hidupkan
             </button>
             <button
               class="button-off"
-              onclick="publishMessage('lampu1', 'OFF')">
+              onclick="publishMessage('<%= id %>','OFF')">
               Matikan
             </button>
           </div>
         </div>
-        <div class="control-card" id="device-lampu2">
-          <img src="https://via.placeholder.com/100" alt="Lampu 2" />
-          <h3>Lampu 2</h3>
-          <div class="status-indicator off" id="status-lampu2">OFF</div>
+        <% }) %>
+      </div>
+
+      <!-- ================= Relay ================= -->
+      <div class="section-title">Kontrol Relay</div>
+      <div class="control-grid">
+        <% ['lampu1','lampu2','lampu3','lampu4','lampu5'].forEach((id,i)=> { %>
+        <div class="control-card" id="device-<%= id %>">
+          <img
+            src="images/relay.png"
+            alt="Relay <%= i+1 %>"
+            onerror="this.src='images/relay.png'" />
+          <h3>Relay <%= i+1 %></h3>
+          <div class="status-indicator off" id="status-<%= id %>">OFF</div>
           <div class="button-group">
-            <button class="button-on" onclick="publishMessage('lampu2', 'ON')">
+            <button
+              class="button-on"
+              onclick="publishMessage('<%= id %>','ON')">
               Hidupkan
             </button>
             <button
               class="button-off"
-              onclick="publishMessage('lampu2', 'OFF')">
+              onclick="publishMessage('<%= id %>','OFF')">
               Matikan
             </button>
           </div>
         </div>
-        <div class="control-card" id="device-lampu3">
-          <img src="https://via.placeholder.com/100" alt="Lampu 3" />
-          <h3>Lampu 3</h3>
-          <div class="status-indicator off" id="status-lampu3">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('lampu3', 'ON')">
-              Hidupkan
-            </button>
-            <button
-              class="button-off"
-              onclick="publishMessage('lampu3', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
-        <div class="control-card" id="device-lampu4">
-          <img src="https://via.placeholder.com/100" alt="Lampu 4" />
-          <h3>Lampu 4</h3>
-          <div class="status-indicator off" id="status-lampu4">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('lampu4', 'ON')">
-              Hidupkan
-            </button>
-            <button
-              class="button-off"
-              onclick="publishMessage('lampu4', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
-        <div class="control-card" id="device-lampu5">
-          <img src="https://via.placeholder.com/100" alt="Lampu 5" />
-          <h3>Lampu 5</h3>
-          <div class="status-indicator off" id="status-lampu5">OFF</div>
-          <div class="button-group">
-            <button class="button-on" onclick="publishMessage('lampu5', 'ON')">
-              Hidupkan
-            </button>
-            <button
-              class="button-off"
-              onclick="publishMessage('lampu5', 'OFF')">
-              Matikan
-            </button>
-          </div>
-        </div>
+        <% }) %>
       </div>
     </div>
 
-    <!-- Script lain (socket, kontrol, dsb) -->
+    <!-- Script kontrol -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
+      let testingMode = false;
 
-      // Cek waktu sekarang
+      // Ambil status awal dari server
+      fetch('/api/testing-mode')
+        .then((res) => res.json())
+        .then((data) => {
+          testingMode = data.testingMode;
+          updateTestButton();
+          updateButtonAvailability();
+        });
+
+      // Toggle Test Mode
+      document
+        .getElementById('toggle-testmode')
+        .addEventListener('click', () => {
+          const pin = prompt('🔒 Masukkan PIN untuk toggle Test Mode:');
+          if (!pin) return;
+          fetch('/api/testing-mode/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pin }),
+          })
+            .then((res) => {
+              if (!res.ok) throw new Error('PIN salah atau request gagal');
+              return res.json();
+            })
+            .then((data) => {
+              testingMode = data.testingMode;
+              updateTestButton();
+              updateButtonAvailability();
+            })
+            .catch((err) => {
+              alert('❌ Gagal toggle Test Mode: ' + err.message);
+            });
+        });
+
+      function updateTestButton() {
+        const btn = document.getElementById('toggle-testmode');
+        const banner = document.getElementById('testmode-banner');
+        if (testingMode) {
+          btn.textContent = 'Matikan Test Mode';
+          btn.classList.add('active');
+          banner.style.display = 'block';
+        } else {
+          btn.textContent = 'Aktifkan Test Mode';
+          btn.classList.remove('active');
+          banner.style.display = 'none';
+        }
+      }
+
       function isRestrictedTime() {
+        if (testingMode) return false;
         const hour = new Date().getHours();
         return hour >= 7 && hour < 18;
       }
 
-      // Nonaktifkan tombol jika jam terlarang
       function updateButtonAvailability() {
         const buttons = document.querySelectorAll('.button-group button');
         const restrictionNotice = document.getElementById('restriction-notice');
-
         if (isRestrictedTime()) {
           buttons.forEach((btn) => btn.setAttribute('disabled', 'disabled'));
           restrictionNotice.style.display = 'block';
         } else {
           buttons.forEach((btn) => btn.removeAttribute('disabled'));
-          restrictionNotice.style.display = 'none';
+          restrictionNotice.style.display = testingMode ? 'none' : 'block';
         }
       }
 
-      // Jalankan saat halaman selesai dimuat
-      document.addEventListener('DOMContentLoaded', () => {
-        updateButtonAvailability();
-        setInterval(updateButtonAvailability, 60 * 1000); // cek ulang tiap menit
-      });
-
-      // Kirim perintah ke server
       function publishMessage(deviceId, command) {
         socket.emit('command', { deviceId, command });
-        console.log(`[SOCKET] Command '${command}' for ${deviceId} emitted`);
       }
 
-      // Update status device dari server
       socket.on('device-status', ({ deviceId, status }) => {
         updateDeviceStatus(deviceId, status);
       });
 
-      // Terima notifikasi command ditolak
       socket.on('command-rejected', ({ deviceId, command, reason }) => {
         alert(`⛔ Perintah '${command}' untuk ${deviceId} ditolak: ${reason}`);
       });
 
-      // Fungsi update UI
       function updateDeviceStatus(deviceId, status) {
         const statusElement = document.getElementById(`status-${deviceId}`);
         if (statusElement) {

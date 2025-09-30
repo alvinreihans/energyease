@@ -30,7 +30,7 @@ router.post('/register', registerUser);
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.clearCookie('connect.sid');
-    res.redirect('/login?success=logout_success');
+    res.redirect('/energyease/login?success=logout_success');
   });
 });
 
