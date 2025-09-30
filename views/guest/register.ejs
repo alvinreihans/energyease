@@ -176,14 +176,14 @@
     </style>
   </head>
   <body>
-    <a href="/energyease" class="back-link">&larr; Kembali ke Beranda</a>
+    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
 
     <h1 class="page-title">Daftar Akun</h1>
 
     <div class="register-container">
       <div class="register-title">Energy Ease</div>
 
-      <form class="form-box" method="POST" action="/energyease/register">
+      <form class="form-box" method="POST" action="/register">
         <% if (error) { %>
         <div class="error-message">
           <% if (error === 'email_exists') { %> Email sudah terdaftar. <% } else
@@ -205,7 +205,7 @@
         <button type="submit">Daftar</button>
         <div class="login-link">
           Sudah punya akun?
-          <a href="/energyease/login">Masuk</a>
+          <a href="/login">Masuk</a>
         </div>
       </form>
     </div>

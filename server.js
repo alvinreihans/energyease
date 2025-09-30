@@ -52,9 +52,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // =============================
 // Routes
 // =============================
-app.use('/energyease', authRoutes);
-app.use('/energyease', dashboardRoutes);
-app.use('/energyease/api', apiRoutes);
+app.use('/', authRoutes);
+app.use('/', dashboardRoutes);
+app.use('/api', apiRoutes);
 
 // =============================
 // Testing Mode dengan PIN
@@ -62,12 +62,12 @@ app.use('/energyease/api', apiRoutes);
 let testingMode = process.env.TESTING_MODE === 'true';
 
 // API cek status
-app.get('/energyease/api/testing-mode', (req, res) => {
+app.get('/api/testing-mode', (req, res) => {
   res.json({ testingMode });
 });
 
 // API toggle dengan PIN
-app.post('/energyease/api/testing-mode/toggle', (req, res) => {
+app.post('/api/testing-mode/toggle', (req, res) => {
   const { pin } = req.body;
 
   console.log('📥 PIN diterima dari client:', pin);
