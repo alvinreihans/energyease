@@ -199,24 +199,40 @@
       <div class="login-title">Energy Ease</div>
 
       <div class="form-box">
-        <% let message = ''; if (success == 'register_success') { message =
-        'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.'; } else if
-        (success == 'logout_success') { message = 'Anda telah keluar.'; } else
-        if (error == 'user_not_found') { message = 'Akun tidak ditemukan'; }
-        else if (error == 'wrong_password') { message = 'Kata sandi salah.'; }
-        else if (error == 'unauthenticated') { message = 'Silakan masuk terlebih
-        dahulu.' } %> <% if (message) { %>
+        <% 
+          let message = '';
+          if (success == 'register_success') {
+              message = 'Pendaftaran akun berhasil. Silakan masuk untuk melanjutkan.';
+          } else if (success == 'logout_success') {
+              message = 'Anda telah keluar.';
+          } else if (error == 'user_not_found') {
+              message = 'Akun tidak ditemukan';
+          } else if (error == 'wrong_password') {
+              message = 'Kata sandi salah.';
+          } else if (error == 'unauthenticated') {
+            message = 'Silakan masuk terlebih dahulu.'
+          }
+        %>
+        <% if (message) { %>
         <div class="<%= success ? 'success-message' : 'error-message' %>">
           <%= message %>
         </div>
         <% } %>
         <p>Masuk ke akun Anda</p>
-        <form action="/login" method="POST">
+        <form action="/energyease/login" method="POST">
           <label for="identifier">Email atau Nama Pengguna</label>
-          <input type="text" name="identifier" id="identifier" required />
+          <input
+            type="text"
+            name="identifier"
+            id="identifier"
+            required />
 
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" required />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            required />
 
           <button type="submit">Masuk</button>
         </form>

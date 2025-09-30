@@ -62,12 +62,12 @@ app.use('/energyease/api', apiRoutes);
 let testingMode = process.env.TESTING_MODE === 'true';
 
 // API cek status
-app.get('/api/testing-mode', (req, res) => {
+app.get('/energyease/api/testing-mode', (req, res) => {
   res.json({ testingMode });
 });
 
 // API toggle dengan PIN
-app.post('/api/testing-mode/toggle', (req, res) => {
+app.post('/energyease/api/testing-mode/toggle', (req, res) => {
   const { pin } = req.body;
 
   console.log('📥 PIN diterima dari client:', pin);
