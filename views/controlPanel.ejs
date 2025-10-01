@@ -290,15 +290,19 @@
       function updateButtonAvailability() {
         const buttons = document.querySelectorAll('.button-group button');
         const restrictionNotice = document.getElementById('restriction-notice');
+
+        // 🚫 Jika waktu terlarang & bukan test mode
         if (isRestrictedTime()) {
           buttons.forEach(btn => btn.setAttribute('disabled', 'disabled'));
           restrictionNotice.style.display = 'block';
-        } else {
+        } 
+        // ✅ Jika waktu bebas atau test mode aktif
+        else {
           buttons.forEach(btn => btn.removeAttribute('disabled'));
-          restrictionNotice.style.display = testingMode ? 'none' : 'block';
+          restrictionNotice.style.display = 'none';
         }
       }
-
+      
       function publishMessage(deviceId, command) {
         socket.emit('command', { deviceId, command });
       }

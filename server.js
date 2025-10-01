@@ -125,12 +125,12 @@ io.on('connection', (socket) => {
 
     // Publish ke MQTT
     const topic = `energyease888/command/${deviceId}`;
-    mqttClient.publish(topic, command);
+    mqttClient.publish(topic, command, { retain: true });
     console.log(`📤 Command '${command}' sent to ${topic}`);
 
     // 👉 Hanya simulasi status kalau device adalah AC
     if (deviceId.startsWith('ac')) {
-      mqttClient.publish(`energyease888/status/${deviceId}`, command);
+      mqttClient.publish(`energyease888/status/${deviceId}`, command, { retain: true });
     }
   });
 
