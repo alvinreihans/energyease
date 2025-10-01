@@ -191,7 +191,8 @@
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+    <!-- Ubah semua href menjadi dinamis -->
+    <a href="<%= baseUrl %>/" class="back-link">&larr; Kembali ke Beranda</a>
 
     <h1 class="page-title">Masuk</h1>
 
@@ -213,13 +214,17 @@
             message = 'Silakan masuk terlebih dahulu.'
           }
         %>
+
         <% if (message) { %>
         <div class="<%= success ? 'success-message' : 'error-message' %>">
           <%= message %>
         </div>
         <% } %>
+
         <p>Masuk ke akun Anda</p>
-        <form action="/login" method="POST">
+
+        <!-- Gunakan baseUrl untuk form action -->
+        <form action="<%= baseUrl %>/login" method="POST">
           <label for="identifier">Email atau Nama Pengguna</label>
           <input
             type="text"
@@ -238,7 +243,8 @@
         </form>
 
         <div class="register-link">
-          Tidak punya akun? <a href="/register">Daftar</a>
+          Tidak punya akun?
+          <a href="<%= baseUrl %>/register">Daftar</a>
         </div>
       </div>
     </div>

@@ -168,14 +168,16 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
-    <%- include('partials/sidebar', { activePage: 'control' }) %>
+    <!-- ✅ Gunakan baseUrl untuk include -->
+    <%- include('partials/sidebar', { activePage: 'control', baseUrl: baseUrl }) %>
+
     <div class="main-content">
       <div class="header">
         <h1>Kontrol Perangkat</h1>
         <button id="toggle-testmode" class="testmode-btn">
           Aktifkan Test Mode
         </button>
-        <%- include('partials/logout') %>
+        <%- include('partials/logout', { baseUrl: baseUrl }) %>
       </div>
 
       <!-- Banner Test Mode -->
@@ -184,10 +186,7 @@
       </div>
 
       <!-- Banner Pembatasan Jam -->
-      <div
-        id="restriction-notice"
-        class="restriction-banner"
-        style="display: none">
+      <div id="restriction-notice" class="restriction-banner" style="display: none">
         ⏰ Kontrol tidak tersedia pada pukul 07.00 - 18.00 WIB
       </div>
 
@@ -196,18 +195,14 @@
       <div class="control-grid">
         <% ['ac1','ac2','ac3'].forEach((id,i)=> { %>
         <div class="control-card" id="device-<%= id %>">
-          <img src="images/AC.png" alt="AC <%= i+1 %>" />
+          <img src="<%= baseUrl %>/images/AC.png" alt="AC <%= i+1 %>" />
           <h3>AC <%= i+1 %></h3>
           <div class="status-indicator off" id="status-<%= id %>">OFF</div>
           <div class="button-group">
-            <button
-              class="button-on"
-              onclick="publishMessage('<%= id %>','ON')">
+            <button class="button-on" onclick="publishMessage('<%= id %>','ON')">
               Hidupkan
             </button>
-            <button
-              class="button-off"
-              onclick="publishMessage('<%= id %>','OFF')">
+            <button class="button-off" onclick="publishMessage('<%= id %>','OFF')">
               Matikan
             </button>
           </div>
@@ -220,21 +215,14 @@
       <div class="control-grid">
         <% ['lampu1','lampu2','lampu3','lampu4','lampu5'].forEach((id,i)=> { %>
         <div class="control-card" id="device-<%= id %>">
-          <img
-            src="images/relay.png"
-            alt="Relay <%= i+1 %>"
-            onerror="this.src='images/relay.png'" />
+          <img src="<%= baseUrl %>/images/relay.png" alt="Relay <%= i+1 %>" />
           <h3>Relay <%= i+1 %></h3>
           <div class="status-indicator off" id="status-<%= id %>">OFF</div>
           <div class="button-group">
-            <button
-              class="button-on"
-              onclick="publishMessage('<%= id %>','ON')">
+            <button class="button-on" onclick="publishMessage('<%= id %>','ON')">
               Hidupkan
             </button>
-            <button
-              class="button-off"
-              onclick="publishMessage('<%= id %>','OFF')">
+            <button class="button-off" onclick="publishMessage('<%= id %>','OFF')">
               Matikan
             </button>
           </div>
@@ -243,45 +231,41 @@
       </div>
     </div>
 
-    <!-- Script kontrol -->
-    <script src="/socket.io/socket.io.js"></script>
+    <!-- ✅ Pastikan socket dan API pakai baseUrl -->
+    <script src="<%= baseUrl %>/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
+      const socket = io(window.location.origin, {
+        path: '<%= baseUrl %>/socket.io/',
+      });
       let testingMode = false;
 
-      // Ambil status awal dari server
-      fetch('/api/testing-mode')
-        .then((res) => res.json())
-        .then((data) => {
+      fetch('<%= baseUrl %>/api/testing-mode')
+        .then(res => res.json())
+        .then(data => {
           testingMode = data.testingMode;
           updateTestButton();
           updateButtonAvailability();
         });
 
-      // Toggle Test Mode
-      document
-        .getElementById('toggle-testmode')
-        .addEventListener('click', () => {
-          const pin = prompt('🔒 Masukkan PIN untuk toggle Test Mode:');
-          if (!pin) return;
-          fetch('/api/testing-mode/toggle', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pin }),
+      document.getElementById('toggle-testmode').addEventListener('click', () => {
+        const pin = prompt('🔒 Masukkan PIN untuk toggle Test Mode:');
+        if (!pin) return;
+        fetch('<%= baseUrl %>/api/testing-mode/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin }),
+        })
+          .then(res => {
+            if (!res.ok) throw new Error('PIN salah atau request gagal');
+            return res.json();
           })
-            .then((res) => {
-              if (!res.ok) throw new Error('PIN salah atau request gagal');
-              return res.json();
-            })
-            .then((data) => {
-              testingMode = data.testingMode;
-              updateTestButton();
-              updateButtonAvailability();
-            })
-            .catch((err) => {
-              alert('❌ Gagal toggle Test Mode: ' + err.message);
-            });
-        });
+          .then(data => {
+            testingMode = data.testingMode;
+            updateTestButton();
+            updateButtonAvailability();
+          })
+          .catch(err => alert('❌ Gagal toggle Test Mode: ' + err.message));
+      });
 
       function updateTestButton() {
         const btn = document.getElementById('toggle-testmode');
@@ -307,10 +291,10 @@
         const buttons = document.querySelectorAll('.button-group button');
         const restrictionNotice = document.getElementById('restriction-notice');
         if (isRestrictedTime()) {
-          buttons.forEach((btn) => btn.setAttribute('disabled', 'disabled'));
+          buttons.forEach(btn => btn.setAttribute('disabled', 'disabled'));
           restrictionNotice.style.display = 'block';
         } else {
-          buttons.forEach((btn) => btn.removeAttribute('disabled'));
+          buttons.forEach(btn => btn.removeAttribute('disabled'));
           restrictionNotice.style.display = testingMode ? 'none' : 'block';
         }
       }
@@ -319,26 +303,17 @@
         socket.emit('command', { deviceId, command });
       }
 
-      socket.on('device-status', ({ deviceId, status }) => {
-        updateDeviceStatus(deviceId, status);
-      });
-
+      socket.on('device-status', ({ deviceId, status }) => updateDeviceStatus(deviceId, status));
       socket.on('command-rejected', ({ deviceId, command, reason }) => {
         alert(`⛔ Perintah '${command}' untuk ${deviceId} ditolak: ${reason}`);
       });
 
       function updateDeviceStatus(deviceId, status) {
-        const statusElement = document.getElementById(`status-${deviceId}`);
-        if (statusElement) {
-          statusElement.textContent = status.toUpperCase();
-          if (status.toUpperCase() === 'ON') {
-            statusElement.classList.remove('off');
-            statusElement.classList.add('on');
-          } else {
-            statusElement.classList.remove('on');
-            statusElement.classList.add('off');
-          }
-        }
+        const el = document.getElementById(`status-${deviceId}`);
+        if (!el) return;
+        el.textContent = status.toUpperCase();
+        el.classList.toggle('on', status.toUpperCase() === 'ON');
+        el.classList.toggle('off', status.toUpperCase() !== 'ON');
       }
     </script>
   </body>

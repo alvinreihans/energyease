@@ -136,7 +136,8 @@
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+    <!-- Gunakan baseUrl agar link tetap benar walau diakses dari /energyease -->
+    <a href="<%= baseUrl %>/" class="back-link">&larr; Kembali ke Beranda</a>
 
     <div class="container">
       <header class="header">
@@ -151,7 +152,7 @@
       <section class="features-grid">
         <div class="feature-card">
           <img
-            src="images/realtime_monitoring.svg"
+            src="<%= baseUrl %>/images/realtime_monitoring.svg"
             alt="Ikon Pemantauan Real-time" />
           <h3>Pemantauan Real-time</h3>
           <p>
@@ -159,32 +160,44 @@
             mendapatkan gambaran penuh tentang pola penggunaan energi.
           </p>
         </div>
+
         <div class="feature-card">
-          <img src="images/ike_analysis.svg" alt="Ikon Analisis IKE" />
+          <img
+            src="<%= baseUrl %>/images/ike_analysis.svg"
+            alt="Ikon Analisis IKE" />
           <h3>Analisis IKE (Indeks Konsumsi Energi)</h3>
           <p>
             Analisis data konsumsi untuk mengukur efisiensi energi dan menemukan
             peluang penghematan yang signifikan.
           </p>
         </div>
+
         <div class="feature-card">
-          <img src="images/iot_control.svg" alt="Ikon Kontrol IoT" />
+          <img
+            src="<%= baseUrl %>/images/iot_control.svg"
+            alt="Ikon Kontrol IoT" />
           <h3>Kontrol Perangkat IoT</h3>
           <p>
             Kendalikan perangkat listrik Anda dari jarak jauh melalui aplikasi,
             memungkinkan manajemen energi yang fleksibel dan cerdas.
           </p>
         </div>
+
         <div class="feature-card">
-          <img src="images/data_history.svg" alt="Ikon Riwayat Data" />
+          <img
+            src="<%= baseUrl %>/images/data_history.svg"
+            alt="Ikon Riwayat Data" />
           <h3>Riwayat Data Lengkap</h3>
           <p>
             Akses riwayat data konsumsi Anda untuk melihat tren harian,
             mingguan, hingga bulanan.
           </p>
         </div>
+
         <div class="feature-card">
-          <img src="images/user_access.svg" alt="Ikon Akses Pengguna" />
+          <img
+            src="<%= baseUrl %>/images/user_access.svg"
+            alt="Ikon Akses Pengguna" />
           <h3>Manajemen Akses Pengguna</h3>
           <p>
             Kelola akses pengguna untuk setiap lokasi atau perangkat, memberikan

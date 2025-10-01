@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +8,7 @@
       body {
         margin: 0;
         font-family: sans-serif;
-        background-image: url('/images/background.png');
+        background-image: url("<%= baseUrl %>/images/background.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -45,7 +44,7 @@
         line-height: 1.6;
       }
 
-      /* Button group */
+      /* Tombol */
       .btn-group {
         display: flex;
         flex-direction: column;
@@ -56,7 +55,6 @@
         justify-content: center;
       }
 
-      /* Button base */
       .btn {
         display: block;
         width: 100%;
@@ -82,7 +80,6 @@
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       }
 
-      /* Responsive Design */
       @media (max-width: 768px) {
         h1 {
           font-size: 28px;
@@ -117,10 +114,10 @@
         Sistem monitoring dan pengendalian energi listrik real-time berbasis IoT
       </p>
       <div class="btn-group">
-        <a href="/login" class="btn">Masuk</a>
-        <a href="/register" class="btn">Daftar</a>
-        <a href="/features" class="btn">Fitur</a>
-        <a href="/about" class="btn">Tentang</a>
+        <a href="<%= baseUrl %>/login" class="btn">Masuk</a>
+        <a href="<%= baseUrl %>/register" class="btn">Daftar</a>
+        <a href="<%= baseUrl %>/features" class="btn">Fitur</a>
+        <a href="<%= baseUrl %>/about" class="btn">Tentang</a>
       </div>
     </div>
   </body>

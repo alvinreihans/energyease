@@ -118,10 +118,12 @@
     </div>
   </div>
 </div>
+
+<!-- Tombol Logout -->
 <div class="logout">
-  <a href="/logout" id="logout-button" class="logout-icon"
-    ><i class="fas fa-sign-out-alt"></i
-  ></a>
+  <a href="<%= baseUrl %>/logout" id="logout-button" class="logout-icon">
+    <i class="fas fa-sign-out-alt"></i>
+  </a>
 </div>
 
 <!-- Script Logout Modal -->
@@ -139,7 +141,7 @@
     });
 
     confirmLogoutButton.addEventListener('click', () => {
-      window.location.href = '/logout';
+      window.location.href = '<%= baseUrl %>/logout';
     });
 
     cancelLogoutButton.addEventListener('click', () => {

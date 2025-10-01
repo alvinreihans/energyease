@@ -42,7 +42,6 @@
         color: var(--secondary-color);
         margin: 0;
       }
-
       .history-card {
         background-color: var(--card-bg-color);
         border-radius: 12px;
@@ -68,7 +67,6 @@
         font-family: 'Poppins', sans-serif;
         box-sizing: border-box;
       }
-
       .history-table {
         width: 100%;
         border-collapse: collapse;
@@ -89,7 +87,6 @@
       .history-table tr:hover {
         background-color: #f9f9f9;
       }
-
       .chart-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -106,7 +103,6 @@
         height: 100% !important;
         display: block;
       }
-
       @media (max-width: 768px) {
         .chart-grid {
           grid-template-columns: 1fr;
@@ -120,15 +116,17 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <!-- ✅ pakai baseUrl -->
+    <script src="<%= baseUrl %>/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <%- include('partials/sidebar', { activePage: 'history' }) %>
+    <!-- ✅ partials ikut baseUrl -->
+    <%- include('partials/sidebar', { activePage: 'history', baseUrl: baseUrl }) %>
 
     <div class="main-content">
       <div class="header">
         <h1>Riwayat Data</h1>
-        <%- include('partials/logout') %>
+        <%- include('partials/logout', { baseUrl: baseUrl }) %>
       </div>
 
       <div class="history-card">
@@ -158,33 +156,26 @@
       <div class="history-card">
         <div class="card-header">Visualisasi Data</div>
         <div class="chart-grid">
-          <div class="chart-container">
-            <canvas id="energiChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <canvas id="dayaChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <canvas id="energiReaktifChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <canvas id="dayaReaktifChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <canvas id="pfChart"></canvas>
-          </div>
+          <div class="chart-container"><canvas id="energiChart"></canvas></div>
+          <div class="chart-container"><canvas id="dayaChart"></canvas></div>
+          <div class="chart-container"><canvas id="energiReaktifChart"></canvas></div>
+          <div class="chart-container"><canvas id="dayaReaktifChart"></canvas></div>
+          <div class="chart-container"><canvas id="pfChart"></canvas></div>
         </div>
       </div>
     </div>
 
     <script>
       let energiChart, dayaChart, energiReaktifChart, dayaReaktifChart, pfChart;
-      const socket = io();
+      const socket = io(window.location.origin, {
+        path: '<%= baseUrl %>/socket.io/',
+      });
+
       let currentHourData = null;
 
       async function fetchData(date) {
         try {
-          const response = await fetch(`/api/history?date=${date}`);
+          const response = await fetch(`<%= baseUrl %>/api/history?date=${date}`);
           return await response.json();
         } catch (error) {
           console.error('Failed to fetch historical data:', error);
@@ -205,20 +196,10 @@
           tr.innerHTML = `
             <td>${time}</td>
             <td>${(d.avg_energy_active || d.energyActive).toFixed(2)}</td>
-            <td>${(d.avg_power_active_total || d.powerActiveTotal).toFixed(
-              2
-            )}</td>
-            <td>${(d.avg_energy_reactive || d.energyReactive || 0).toFixed(
-              2
-            )}</td>
-            <td>${(
-              d.avg_power_reactive_total ||
-              d.powerReactiveTotal ||
-              0
-            ).toFixed(2)}</td>
-            <td>${(d.avg_total_power_factor || d.totalPowerFactor).toFixed(
-              2
-            )}</td>
+            <td>${(d.avg_power_active_total || d.powerActiveTotal).toFixed(2)}</td>
+            <td>${(d.avg_energy_reactive || d.energyReactive || 0).toFixed(2)}</td>
+            <td>${(d.avg_power_reactive_total || d.powerReactiveTotal || 0).toFixed(2)}</td>
+            <td>${(d.avg_total_power_factor || d.totalPowerFactor).toFixed(2)}</td>
           `;
           tableBody.appendChild(tr);
         });
@@ -229,21 +210,11 @@
             minute: '2-digit',
           })
         );
-        const energiData = dataArray.map(
-          (d) => d.avg_energy_active || d.energyActive
-        );
-        const dayaData = dataArray.map(
-          (d) => d.avg_power_active_total || d.powerActiveTotal
-        );
-        const energiReaktifData = dataArray.map(
-          (d) => d.avg_energy_reactive || d.energyReactive || 0
-        );
-        const dayaReaktifData = dataArray.map(
-          (d) => d.avg_power_reactive_total || d.powerReactiveTotal || 0
-        );
-        const pfData = dataArray.map(
-          (d) => d.avg_total_power_factor || d.totalPowerFactor
-        );
+        const energiData = dataArray.map((d) => d.avg_energy_active || d.energyActive);
+        const dayaData = dataArray.map((d) => d.avg_power_active_total || d.powerActiveTotal);
+        const energiReaktifData = dataArray.map((d) => d.avg_energy_reactive || d.energyReactive || 0);
+        const dayaReaktifData = dataArray.map((d) => d.avg_power_reactive_total || d.powerReactiveTotal || 0);
+        const pfData = dataArray.map((d) => d.avg_total_power_factor || d.totalPowerFactor);
 
         if (energiChart) energiChart.destroy();
         if (dayaChart) dayaChart.destroy();
@@ -253,105 +224,39 @@
 
         energiChart = new Chart(document.getElementById('energiChart'), {
           type: 'line',
-          data: {
-            labels,
-            datasets: [
-              {
-                label: 'Energi Aktif (kWh)',
-                data: energiData,
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                fill: true,
-                tension: 0.4,
-              },
-            ],
-          },
+          data: { labels, datasets: [{ label: 'Energi Aktif (kWh)', data: energiData, borderColor: '#3498db', backgroundColor: 'rgba(52,152,219,0.2)', fill: true, tension: 0.4 }] },
           options: { responsive: true, maintainAspectRatio: false },
         });
 
         dayaChart = new Chart(document.getElementById('dayaChart'), {
           type: 'line',
-          data: {
-            labels,
-            datasets: [
-              {
-                label: 'Daya Aktif (W)',
-                data: dayaData,
-                borderColor: '#2ecc71',
-                backgroundColor: 'rgba(46, 204, 113, 0.2)',
-                fill: true,
-                tension: 0.4,
-              },
-            ],
-          },
+          data: { labels, datasets: [{ label: 'Daya Aktif (W)', data: dayaData, borderColor: '#2ecc71', backgroundColor: 'rgba(46,204,113,0.2)', fill: true, tension: 0.4 }] },
           options: { responsive: true, maintainAspectRatio: false },
         });
 
-        energiReaktifChart = new Chart(
-          document.getElementById('energiReaktifChart'),
-          {
-            type: 'line',
-            data: {
-              labels,
-              datasets: [
-                {
-                  label: 'Energi Reaktif (kVARh)',
-                  data: energiReaktifData,
-                  borderColor: '#9b59b6',
-                  backgroundColor: 'rgba(155, 89, 182, 0.2)',
-                  fill: true,
-                  tension: 0.4,
-                },
-              ],
-            },
-            options: { responsive: true, maintainAspectRatio: false },
-          }
-        );
+        energiReaktifChart = new Chart(document.getElementById('energiReaktifChart'), {
+          type: 'line',
+          data: { labels, datasets: [{ label: 'Energi Reaktif (kVARh)', data: energiReaktifData, borderColor: '#9b59b6', backgroundColor: 'rgba(155,89,182,0.2)', fill: true, tension: 0.4 }] },
+          options: { responsive: true, maintainAspectRatio: false },
+        });
 
-        dayaReaktifChart = new Chart(
-          document.getElementById('dayaReaktifChart'),
-          {
-            type: 'line',
-            data: {
-              labels,
-              datasets: [
-                {
-                  label: 'Daya Reaktif (VAR)',
-                  data: dayaReaktifData,
-                  borderColor: '#e74c3c',
-                  backgroundColor: 'rgba(231, 76, 60, 0.2)',
-                  fill: true,
-                  tension: 0.4,
-                },
-              ],
-            },
-            options: { responsive: true, maintainAspectRatio: false },
-          }
-        );
+        dayaReaktifChart = new Chart(document.getElementById('dayaReaktifChart'), {
+          type: 'line',
+          data: { labels, datasets: [{ label: 'Daya Reaktif (VAR)', data: dayaReaktifData, borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.2)', fill: true, tension: 0.4 }] },
+          options: { responsive: true, maintainAspectRatio: false },
+        });
 
         pfChart = new Chart(document.getElementById('pfChart'), {
           type: 'line',
-          data: {
-            labels,
-            datasets: [
-              {
-                label: 'Faktor Daya',
-                data: pfData,
-                borderColor: '#f39c12',
-                backgroundColor: 'rgba(243, 156, 18, 0.2)',
-                fill: true,
-                tension: 0.4,
-              },
-            ],
-          },
+          data: { labels, datasets: [{ label: 'Faktor Daya', data: pfData, borderColor: '#f39c12', backgroundColor: 'rgba(243,156,18,0.2)', fill: true, tension: 0.4 }] },
           options: { responsive: true, maintainAspectRatio: false },
         });
       }
 
       async function updateData(selectedDate) {
         const hourlyData = await fetchData(selectedDate);
-
         let combinedData = [...hourlyData];
+
         if (currentHourData) {
           const currentHourDate = new Date().toISOString().split('T')[0];
           if (currentHourDate === selectedDate) {
@@ -360,13 +265,11 @@
               avg_energy_active: currentHourData.avgEnergyActive,
               avg_power_active_total: currentHourData.avgPowerActiveTotal,
               avg_energy_reactive: currentHourData.avgEnergyReactive || 0,
-              avg_power_reactive_total:
-                currentHourData.avgPowerReactiveTotal || 0,
+              avg_power_reactive_total: currentHourData.avgPowerReactiveTotal || 0,
               avg_total_power_factor: currentHourData.avgTotalPowerFactor,
             });
           }
         }
-
         updateTableAndCharts(combinedData);
       }
 

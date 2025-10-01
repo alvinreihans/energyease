@@ -14,16 +14,25 @@ import { setupMqtt, mqttClient } from './config/mqtt.js';
 const app = express();
 const server = http.createServer(app);
 
-// 🔑 FIX: aktifkan CORS agar socket.io bisa connect dari browser
+// =============================
+// Socket.IO + CORS
+// =============================
 const io = new SocketIO(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
   },
+  path: '/energyease/socket.io/',
 });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// =============================
+// Global Base URL
+// =============================
+// 🧩 semua EJS akan otomatis tahu kalau base path = /energyease
+app.locals.baseUrl = '/energyease';
 
 // =============================
 // App Config
@@ -42,19 +51,22 @@ app.use(
   })
 );
 
+// Middleware global untuk set variabel userId di EJS
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId;
+  res.locals.baseUrl = app.locals.baseUrl;
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// ✅ Public folder diakses lewat prefix /energyease
+app.use('/energyease', express.static(path.join(__dirname, 'public')));
 
 // =============================
-// Routes
+// Routes dengan prefix /energyease
 // =============================
-app.use('/', authRoutes);
-app.use('/', dashboardRoutes);
-app.use('/api', apiRoutes);
+app.use('/energyease', authRoutes);
+app.use('/energyease', dashboardRoutes);
+app.use('/energyease/api', apiRoutes);
 
 // =============================
 // Testing Mode dengan PIN
@@ -62,12 +74,12 @@ app.use('/api', apiRoutes);
 let testingMode = process.env.TESTING_MODE === 'true';
 
 // API cek status
-app.get('/api/testing-mode', (req, res) => {
+app.get('/energyease/api/testing-mode', (req, res) => {
   res.json({ testingMode });
 });
 
 // API toggle dengan PIN
-app.post('/api/testing-mode/toggle', (req, res) => {
+app.post('/energyease/api/testing-mode/toggle', (req, res) => {
   const { pin } = req.body;
 
   console.log('📥 PIN diterima dari client:', pin);
@@ -80,9 +92,7 @@ app.post('/api/testing-mode/toggle', (req, res) => {
 
   testingMode = !testingMode;
   io.emit('testing-mode-changed', { testingMode });
-  console.log(
-    `⚡ Testing mode sekarang: ${testingMode ? 'AKTIF' : 'NONAKTIF'}`
-  );
+  console.log(`⚡ Testing mode sekarang: ${testingMode ? 'AKTIF' : 'NONAKTIF'}`);
   res.json({ testingMode });
 });
 
@@ -104,9 +114,7 @@ io.on('connection', (socket) => {
 
     // Kalau bukan testing mode → tetap batasi jam
     if (!testingMode && hour >= 7 && hour < 18) {
-      console.log(
-        `⛔ Command '${command}' for ${deviceId} ditolak (jam terlarang)`
-      );
+      console.log(`⛔ Command '${command}' for ${deviceId} ditolak (jam terlarang)`);
       socket.emit('command-rejected', {
         deviceId,
         command,
@@ -137,6 +145,6 @@ io.on('connection', (socket) => {
 const PORT = 4000;
 const HOST = '0.0.0.0';
 server.listen(PORT, HOST, () => {
-  console.log(`✅ Server jalan di http://localhost:${PORT}`);
+  console.log(`✅ Server jalan di http://localhost:${PORT}/energyease`);
   console.log(`⚡ Testing mode: ${testingMode ? 'AKTIF' : 'NONAKTIF'}`);
 });

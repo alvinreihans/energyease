@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Energy Ease - Analisis IKE</title>
     <style>
-      /* CSS umum dan layout IKE */
       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
       :root {
         --primary-color: #3498db;
         --secondary-color: #2c3e50;
@@ -17,8 +15,6 @@
         --light-text: #bdc3c7;
         --border-color: #e0e6ed;
         --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-
-        /* Warna Status IKE */
         --status-sangat-efisien: #27ae60;
         --status-efisien: #3498db;
         --status-cukup-efisien: #f1c40f;
@@ -120,17 +116,20 @@
         background-color: var(--status-boros);
       }
     </style>
+
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
-    <%- include('partials/sidebar') %>
+    <!-- ✅ include dengan baseUrl -->
+    <%- include('partials/sidebar', { activePage: 'ike', baseUrl: baseUrl }) %>
 
     <div class="main-content">
       <div class="header">
         <h1>Analisis IKE</h1>
-        <%- include('partials/logout') %>
+        <%- include('partials/logout', { baseUrl: baseUrl }) %>
       </div>
 
       <div class="ike-container">
@@ -142,12 +141,15 @@
         </div>
       </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- ✅ gunakan baseUrl -->
+    <script src="<%= baseUrl %>/socket.io/socket.io.js"></script>
     <script>
       const ikeStatusElement = document.getElementById('ike-status');
       const ikeValueElement = document.getElementById('ike-value');
-
-      const socket = io();
+      const socket = io(window.location.origin, {
+        path: '<%= baseUrl %>/socket.io/',
+      });
 
       const statusClass = {
         'Sangat Efisien': 'status-sangat-efisien',
@@ -158,7 +160,7 @@
 
       socket.on('IKE', (data) => {
         try {
-          console.log('[IKE Event diterima]', data); // 🔍 log data asli dari server
+          console.log('[IKE Event diterima]', data);
 
           if (!data) return;
 
@@ -166,23 +168,13 @@
           const rawValue = data.value;
           const valueNum = Number(rawValue);
 
-          console.log('[IKE Parsed]', { status, valueNum });
-
           ikeStatusElement.textContent = status || '—';
           ikeValueElement.textContent = isNaN(valueNum)
             ? '-- kWh/m²/bulan'
             : `${valueNum.toFixed(2)} kWh/m²/bulan`;
 
-          // reset class lalu tambahkan class sesuai status
           ikeStatusElement.className = 'ike-status';
-          if (statusClass[status]) {
-            ikeStatusElement.classList.add(statusClass[status]);
-          }
-
-          console.log('[IKE Updated UI]', {
-            elementClass: ikeStatusElement.className,
-            elementText: ikeStatusElement.textContent,
-          });
+          if (statusClass[status]) ikeStatusElement.classList.add(statusClass[status]);
         } catch (e) {
           console.error('[IKE handler] error:', e);
         }

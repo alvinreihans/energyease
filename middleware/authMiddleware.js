@@ -6,8 +6,8 @@ export function isLoggedIn(req, res, next) {
     // Jika user sudah login, lanjutkan ke rute berikutnya
     next();
   } else {
-    // Jika user belum login, redirect ke halaman login
-    res.redirect('/login?error=unauthenticated');
+    // Jika user belum login, redirect ke halaman login di bawah subpath /energyease
+    res.redirect('/energyease/login?error=unauthenticated');
   }
 }
 
@@ -17,7 +17,7 @@ export function isLoggedOut(req, res, next) {
     // Jika user belum login, lanjutkan ke rute berikutnya
     next();
   } else {
-    // Jika user sudah login, redirect ke halaman dashboard
-    res.redirect('/dashboard');
+    // Jika user sudah login, redirect ke dashboard di bawah subpath /energyease
+    res.redirect('/energyease/dashboard');
   }
 }

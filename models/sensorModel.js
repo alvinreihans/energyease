@@ -1,12 +1,15 @@
-// sensorModel.js
+// src/models/sensorModel.js
 import db from '../config/db.js';
 
-// Fungsi untuk menyimpan data mentah ke tabel `raw_sensor_data`
+/**
+ * Simpan data mentah dari sensor ke tabel raw_sensor_data
+ */
 export const saveRawSensorData = async (data) => {
   try {
-    await db.query(
+    const [result] = await db.query(
       `INSERT INTO raw_sensor_data (
-        energy_active, energy_reactive, total_power_factor, power_active_total, power_reactive_total, power_apparent_total, 
+        energy_active, energy_reactive, total_power_factor, 
+        power_active_total, power_reactive_total, power_apparent_total, 
         voltage_r, current_r, power_active_r, power_reactive_r, power_apparent_r, power_factor_r, 
         voltage_s, current_s, power_active_s, power_reactive_s, power_apparent_s, power_factor_s,
         voltage_t, current_t, power_active_t, power_reactive_t, power_apparent_t, power_factor_t
@@ -38,32 +41,55 @@ export const saveRawSensorData = async (data) => {
         data.powerFactorT,
       ]
     );
+
+    // Optional: log ringan untuk debug (hapus bila sudah stabil)
+    // console.log(`[DB] Data sensor disimpan (insertId: ${result.insertId})`);
   } catch (error) {
-    console.error('Error saving raw sensor data:', error);
+    console.error('❌ [DB Error] Gagal menyimpan data sensor:', error.message);
   }
 };
 
-// Fungsi untuk mengambil data agregasi per jam dari database
+/**
+ * Ambil data per jam (hourly_summary) berdasarkan tanggal
+ */
 export const getHourlyData = async (date) => {
-  const [rows] = await db.query(
-    'SELECT * FROM hourly_summary WHERE DATE(start_time) = ? ORDER BY start_time ASC',
-    [date]
-  );
-  return rows;
+  try {
+    const [rows] = await db.query(
+      `SELECT * 
+       FROM hourly_summary 
+       WHERE DATE(start_time) = ? 
+       ORDER BY start_time ASC`,
+      [date]
+    );
+    return rows;
+  } catch (error) {
+    console.error('❌ [DB Error] Gagal mengambil data hourly_summary:', error.message);
+    return [];
+  }
 };
 
-// fungsi query untuk ambil data raw per jam:
+/**
+ * Ambil semua data mentah dari raw_sensor_data dalam rentang jam tertentu
+ */
 export const getRawSensorDataByHour = async (startTime, endTime) => {
-  const [rows] = await db.query(
-    `SELECT * FROM raw_sensor_data 
-     WHERE timestamp BETWEEN ? AND ? 
-     ORDER BY timestamp ASC`,
-    [startTime, endTime]
-  );
-  return rows;
+  try {
+    const [rows] = await db.query(
+      `SELECT * 
+       FROM raw_sensor_data 
+       WHERE timestamp BETWEEN ? AND ? 
+       ORDER BY timestamp ASC`,
+      [startTime, endTime]
+    );
+    return rows;
+  } catch (error) {
+    console.error('❌ [DB Error] Gagal mengambil raw data sensor:', error.message);
+    return [];
+  }
 };
 
-// Fungsi untuk menyimpan hasil agregasi
+/**
+ * Simpan hasil agregasi rata-rata ke tabel hourly_summary
+ */
 export const saveHourlySummary = async (data) => {
   const {
     startTime,
@@ -74,17 +100,18 @@ export const saveHourlySummary = async (data) => {
     avgPowerReactiveTotal,
     avgPowerApparentTotal,
   } = data;
+
   try {
     await db.query(
       `INSERT INTO hourly_summary (
         start_time,
         avg_energy_active,
         avg_energy_reactive,
-        avg_total_power_factor, 
+        avg_total_power_factor,
         avg_power_active_total,
         avg_power_reactive_total,
-        avg_power_apparent_total) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        avg_power_apparent_total
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         startTime,
         avgEnergyActive,
@@ -95,7 +122,9 @@ export const saveHourlySummary = async (data) => {
         avgPowerApparentTotal,
       ]
     );
+
+    // console.log(`[DB] Data agregasi jam ${startTime} disimpan`);
   } catch (error) {
-    console.error('Error saving hourly summary:', error);
+    console.error('❌ [DB Error] Gagal menyimpan data agregasi:', error.message);
   }
 };

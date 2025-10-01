@@ -69,7 +69,6 @@
         margin-bottom: 20px;
       }
 
-      /* Form box and elements */
       .form-box {
         width: 100%;
         max-width: 380px;
@@ -142,7 +141,6 @@
         text-decoration: underline;
       }
 
-      /* Responsive Design */
       @media (max-width: 768px) {
         .page-title {
           font-size: 32px;
@@ -176,21 +174,22 @@
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+    <!-- 🔧 gunakan baseUrl agar tetap bisa diakses melalui /energyease/... -->
+    <a href="<%= baseUrl %>/" class="back-link">&larr; Kembali ke Beranda</a>
 
     <h1 class="page-title">Daftar Akun</h1>
 
     <div class="register-container">
       <div class="register-title">Energy Ease</div>
 
-      <form class="form-box" method="POST" action="/register">
+      <!-- Gunakan baseUrl di action -->
+      <form class="form-box" method="POST" action="<%= baseUrl %>/register">
         <% if (error) { %>
         <div class="error-message">
-          <% if (error === 'email_exists') { %> Email sudah terdaftar. <% } else
-          if (error === 'username_exists') { %> Nama pengguna sudah digunakan.
-          <% } %>
+          <% if (error === 'email_exists') { %> Email sudah terdaftar. <% } else if (error === 'username_exists') { %> Nama pengguna sudah digunakan. <% } %>
         </div>
         <% } %>
+
         <p>Daftar akun untuk memulai</p>
 
         <label for="username">Nama pengguna</label>
@@ -203,9 +202,10 @@
         <input name="password" id="password" type="password" required />
 
         <button type="submit">Daftar</button>
+
         <div class="login-link">
           Sudah punya akun?
-          <a href="/login">Masuk</a>
+          <a href="<%= baseUrl %>/login">Masuk</a>
         </div>
       </form>
     </div>

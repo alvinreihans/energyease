@@ -49,7 +49,7 @@ export const calculateIKE = (energyActive) => {
     status = 'Efisien';
   } else if (value < 18.5) {
     status = 'Cukup Efisien';
-  } else {
+  } else if (value >= 18.5) {
     status = 'Boros';
   }
 

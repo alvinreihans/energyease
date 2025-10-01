@@ -65,8 +65,8 @@
     }
 
     body {
-      margin-left: 0 !important; /* hilangkan margin sidebar */
-      padding-bottom: 80px; /* beri ruang untuk floating nav */
+      margin-left: 0 !important;
+      padding-bottom: 80px;
     }
 
     .bottom-nav {
@@ -131,7 +131,7 @@
     }
 
     .bottom-nav {
-      width: calc(100% - 20px); /* kasih sedikit margin biar floating */
+      width: calc(100% - 20px);
       left: 50%;
       transform: translateX(-50%);
       max-width: 100%;
@@ -147,31 +147,35 @@
     <ul>
       <li>
         <a
-          href="/dashboard"
+          href="<%= baseUrl %>/dashboard"
           class="<%= activePage === 'dashboard' ? 'active' : '' %>"
-          ><i class="fas fa-home"></i> Dashboard</a
         >
+          <i class="fas fa-home"></i> Dashboard
+        </a>
       </li>
       <li>
         <a
-          href="/ike"
+          href="<%= baseUrl %>/ike"
           class="<%= activePage === 'ike' ? 'active' : '' %>"
-          ><i class="fas fa-chart-bar"></i> Analisis IKE</a
         >
+          <i class="fas fa-chart-bar"></i> Analisis IKE
+        </a>
       </li>
       <li>
         <a
-          href="/control-panel"
+          href="<%= baseUrl %>/control-panel"
           class="<%= activePage === 'control' ? 'active' : '' %>"
-          ><i class="fas fa-cogs"></i> Kontrol Panel</a
         >
+          <i class="fas fa-cogs"></i> Kontrol Panel
+        </a>
       </li>
       <li>
         <a
-          href="/history"
+          href="<%= baseUrl %>/history"
           class="<%= activePage === 'history' ? 'active' : '' %>"
-          ><i class="fas fa-history"></i> Riwayat Data</a
         >
+          <i class="fas fa-history"></i> Riwayat Data
+        </a>
       </li>
     </ul>
   </nav>
@@ -180,21 +184,30 @@
 <!-- Bottom Navbar untuk mobile -->
 <div class="bottom-nav">
   <a
-    href="/dashboard"
+    href="<%= baseUrl %>/dashboard"
     class="<%= activePage === 'dashboard' ? 'active' : '' %>"
-    ><i class="fas fa-home"></i><span>Dashboard</span></a
   >
-  <a href="/ike" class="<%= activePage === 'ike' ? 'active' : '' %>"
-    ><i class="fas fa-chart-bar"></i><span>IKE</span></a
-  >
+    <i class="fas fa-home"></i><span>Dashboard</span>
+  </a>
+
   <a
-    href="/control-panel"
+    href="<%= baseUrl %>/ike"
+    class="<%= activePage === 'ike' ? 'active' : '' %>"
+  >
+    <i class="fas fa-chart-bar"></i><span>IKE</span>
+  </a>
+
+  <a
+    href="<%= baseUrl %>/control-panel"
     class="<%= activePage === 'control' ? 'active' : '' %>"
-    ><i class="fas fa-cogs"></i><span>Kontrol</span></a
   >
+    <i class="fas fa-cogs"></i><span>Kontrol</span>
+  </a>
+
   <a
-    href="/history"
+    href="<%= baseUrl %>/history"
     class="<%= activePage === 'history' ? 'active' : '' %>"
-    ><i class="fas fa-history"></i><span>Riwayat</span></a
   >
+    <i class="fas fa-history"></i><span>Riwayat</span>
+  </a>
 </div>

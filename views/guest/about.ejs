@@ -160,33 +160,24 @@
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">&larr; Kembali ke Beranda</a>
+    <!-- Gunakan baseUrl agar tetap benar walaupun diakses lewat /energyease/about -->
+    <a href="<%= baseUrl %>/" class="back-link">&larr; Kembali ke Beranda</a>
 
     <div class="container">
       <section class="section about-us-section">
         <h2>Tentang Kami</h2>
         <div class="about-text">
           <p>
-            <strong>Energy Ease</strong> adalah sistem monitoring dan
-            pengendalian energi listrik berbasis web yang dirancang untuk
-            memberikan kemudahan dalam memantau serta mengontrol konsumsi energi
-            secara real-time. Sistem ini menggunakan teknologi
+            <strong>Energy Ease</strong> adalah sistem monitoring dan pengendalian energi listrik berbasis web yang dirancang untuk memberikan kemudahan dalam memantau serta mengontrol konsumsi energi secara real-time. Sistem ini menggunakan teknologi
             <strong>Internet of Things (IoT)</strong> dengan protokol
-            <strong>MQTT</strong> untuk melakukan komunikasi antara sensor,
-            aktuator, dan aplikasi web.
+            <strong>MQTT</strong> untuk melakukan komunikasi antara sensor, aktuator, dan aplikasi web.
           </p>
           <p>
-            Melalui sistem ini, pengguna dapat memantau parameter kelistrikan
-            seperti tegangan, arus, daya, faktor daya, serta mengetahui nilai
-            energi aktif dan reaktif. Selain itu, fitur pengendalian peralatan
-            seperti lampu dan AC juga tersedia dalam antarmuka yang mudah
-            digunakan.
+            Melalui sistem ini, pengguna dapat memantau parameter kelistrikan seperti tegangan, arus, daya, faktor daya, serta mengetahui nilai energi aktif dan reaktif. Selain itu, fitur pengendalian peralatan seperti lampu dan AC juga tersedia dalam antarmuka yang mudah digunakan.
           </p>
           <p>
             Energy Ease dilengkapi pula dengan fitur perhitungan
-            <strong>Indeks Konsumsi Energi (IKE)</strong> serta tampilan histori
-            data dalam bentuk grafik yang informatif, membantu pengguna dalam
-            menganalisis efisiensi energi pada suatu gedung atau ruangan.
+            <strong>Indeks Konsumsi Energi (IKE)</strong> serta tampilan histori data dalam bentuk grafik yang informatif, membantu pengguna dalam menganalisis efisiensi energi pada suatu gedung atau ruangan.
           </p>
         </div>
       </section>
@@ -195,7 +186,7 @@
         <h2>Pengembang</h2>
         <div class="developer-grid">
           <div class="developer-card">
-            <img src="images/person1.png" alt="Foto Yosi" />
+            <img src="<%= baseUrl %>/images/person1.png" alt="Foto Yosi" />
             <h3>Yosi</h3>
             <p><strong>NIM:</strong> 121130100</p>
             <p><strong>Email:</strong> yosi.121130100@student.itera.ac.id</p>
@@ -203,7 +194,7 @@
           </div>
 
           <div class="developer-card">
-            <img src="images/person2.png" alt="Foto Jacobus" />
+            <img src="<%= baseUrl %>/images/person2.png" alt="Foto Jacobus" />
             <h3>Jacobus</h3>
             <p><strong>NIM:</strong> 121130147</p>
             <p><strong>Email:</strong> jacobus.121130147@student.itera.ac.id</p>
@@ -211,7 +202,7 @@
           </div>
 
           <div class="developer-card">
-            <img src="images/person3.png" alt="Foto Yuhfa" />
+            <img src="<%= baseUrl %>/images/person3.png" alt="Foto Yuhfa" />
             <h3>Yuhfa</h3>
             <p><strong>NIM:</strong> 121130036</p>
             <p><strong>Email:</strong> yuhfa.121130036@student.itera.ac.id</p>
@@ -226,8 +217,7 @@
           <p><strong>Email:</strong> info@energyease.com</p>
           <p><strong>Telepon:</strong> 0811-8742-7858</p>
           <p>
-            <strong>Alamat:</strong> Jl. Terusan Ryacudu, Way Huwi, Kec. Jati
-            Agung, Kab. Lampung Selatan, Lampung 35365
+            <strong>Alamat:</strong> Jl. Terusan Ryacudu, Way Huwi, Kec. Jati Agung, Kab. Lampung Selatan, Lampung 35365
           </p>
         </div>
       </section>
